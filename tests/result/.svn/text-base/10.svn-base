@@ -1,0 +1,19 @@
+mkdir /tmp/test_gamin
+mkdir /tmp/test_gamin/subdir
+mkfile /tmp/test_gamin/subdir/foo
+connected to test
+mondir /tmp/test_gamin 0
+1: /tmp/test_gamin Exists: NULL
+1: subdir Exists: NULL
+1: /tmp/test_gamin EndExist: NULL
+monfile /tmp/test_gamin/subdir/foo 1
+2: /tmp/test_gamin/subdir/foo Exists: NULL
+2: /tmp/test_gamin/subdir/foo EndExist: NULL
+cancel 0 2
+1: /tmp/test_gamin Acknowledge: NULL
+append /tmp/test_gamin/subdir/foo
+2: /tmp/test_gamin/subdir/foo Changed: NULL
+disconnected
+rmfile /tmp/test_gamin/subdir/foo
+rmdir /tmp/test_gamin/subdir
+rmdir /tmp/test_gamin

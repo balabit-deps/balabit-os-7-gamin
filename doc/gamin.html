@@ -1,0 +1,742 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html">
+  <title>Gamin the File Alteration Monitor</title>
+</head>
+
+<body style="color: #000000;background-color: #FFFFFF">
+<h1 style="text-align: center">Gamin the File Alteration Monitor</h1>
+
+<p>Gamin is a file and directory monitoring system defined to be a subset of
+the <a href="http://oss.sgi.com/projects/fam/">FAM</a> (File Alteration
+Monitor) system. This is a service provided by a library which allows to
+detect when a file or a directory has been modified.</p>
+
+<h2><a name="Overview">Overview</a></h2>
+
+<p>Gamin is a file and directory monitoring system defined to be a subset of
+the <a href="http://oss.sgi.com/projects/fam/">FAM</a> (File Alteration
+Monitor) system.</p>
+
+<p>The main goals of the project are:</p>
+<ol>
+  <li>minimize the security model of FAM, the daemon runs under the user
+    account, it is compatible with SELinux</li>
+  <li>simplify the code base, dropping some of the most exotic feature of
+  FAM</li>
+  <li>provide an API and ABI compatible replacement for FAM</li>
+  <li>try to fix some other issues like resource consumption</li>
+</ol>
+
+<p>Gamin also serves as an interface to test the inotify mechanism to improve
+the existing dnotify monitoring interface present in the Linux kernel.</p>
+
+<p>At this point Gamin is fairly tied to Linux, portability is not a primary
+goal at this stage but if you have portability patches they are welcome.</p>
+
+<p>From an historical point of view, gamin builds from the marmot project
+authored by James Willcox and Corey Bowers and then heavilly modified to turn
+it into a minimalist FAM replacement (Francophones will appreciate the
+filiation from fam to marmot and gamin.)</p>
+
+<p>This library is available under the terms of the <a
+href="http://www.gnu.org/copyleft/lesser.html">GNU LIBRARY GENERAL PUBLIC
+LICENSE</a>, and a <a
+href="http://www.opensource.org/licenses/lgpl-license.php">copy</a> of it
+should be found in the source under the COPYING file.</p>
+
+<h2><a name="Using">Using gamin</a></h2>
+
+<p>Basically it is exactly like for using the fam interface. From a
+programmer point of view this is the same API, and one can make use of
+the existing FAM documentation.</p>
+
+<h2><a name="Config">Configuration</a></h2>
+
+<p>By default gamin should work without needing any configuration, but
+sometimes using the kernel notification APIs doesn't work or lead to troubles
+(for example when trying to unmount device). By default gamin revert to using
+polling for all paths matching <code>/mnt/*</code> or <code>/media/*</code>
+on Linux. This may be overriden or extended by the one of the three config files
+<code>/etc/gamin/gaminrc</code>, <code>$HOME/.gaminrc</code>, <code>/etc/gamin/mandatory_gaminrc</code> (note that prior to 0.1.4 only <code>$HOME/.gaminrc</code> was used and fsset was not implemented).
+Here is an example of such a configuration file:</p>
+<pre># configuration for gamin
+# Can be used to override the default behaviour.
+# notify filepath(s) : indicate to use kernel notification
+# poll filepath(s)   : indicate to use polling instead
+# fsset fsname method poll_limit : indicate what method of notification for the filesystem
+#                                  kernel - use the kernel for notification
+#                                  poll - use polling for notification
+#                                  none - don't use any notification
+#                                  
+#                                  the poll_limit is the number of seconds
+#                                  that must pass before a resource is polled again.
+#                                  It is optional, and if it is not present the previous
+#                                  value will be used or the default.
+ 
+notify /mnt/local* /mnt/pictures* # use kernel notification on these paths
+poll /temp/*                      # use poll notification on these paths
+fsset nfs poll 10                 # use polling on nfs mounts and poll once every 10 seconds
+</pre>
+
+<p>The configuration file accepts only 3 types of command:</p>
+<ul>
+  <li>notify : to express that kernel monitoring should be used for matching
+    paths</li>
+  <li>poll: to express that polling should be used for matching paths</li>
+  <li>fsset: to control what notification method is used on a filesystem type</li>
+</ul>
+
+
+<p>The three config files are loaded in this order:</p>
+<ul>
+	<li><code>/etc/gamin/gaminrc</code></li>
+	<li><code>~/.gaminrc</code></li>
+	<li><code>/etc/gamin/mandatory_gaminrc</code></li>
+</ul>
+<p>The mandatory config file allows the system administrator to override any potentially dangerous preferences set by the user.</p>
+
+<p>When checking a path to guess whether polling or kernel notification
+should be used, gamin checks first the user provided rules in their
+declaration order within the configuration file and then check the predefined
+rules. This way the first declaration for <code>/mnt/local*</code> in the
+example override the default one for <code>/mnt/*</code> .</p>
+<p>If gamin is not told to use poll on a particular path, it will then try and decide based on the filesystem the path is located on</p>
+
+<p><em>Caveat: separators in the config file should be spaces, not tabs.</em></p>
+
+<h2><a name="News">News</a></h2>
+
+<h3>0.1.10: Nov 24 2008</h3>
+<ul>
+  <li>Portability fixes: configure fixes (Daniel Drake), configure extension
+      detection (Dodji Seketeli), missing quotes in acinclude (Daichi Kawahata),
+      daemon build flags (Rémi Cardona), drop glib dependency for libgamin
+      (Rémi Cardona), python bindings install (Rémi Cardona), system inotify
+      detection and use (Adrian Bunk)</li>
+  <li>Bug fixes: parent recursing on missing watch (Ray Strode), memory
+      leak when releasing fses (Matthias Clasen)</li>
+  <li>Improvement: API and ABI missing entry points (Ryan Underwood),
+      configure switches for just server or lib build (Rémi Cardona)</li>
+</ul>
+<h3>0.1.9: Jul 27 2007</h3>
+<ul>
+  <li>Bug fixes: enable polling when using inotify this fixes support for NFS 
+      partitions (Alexander Larsson), do not run idle handler if not needed
+      reduce wakeups (Alexander Larsson), handling of failure of inotify
+      initialization (Robert Clark), force poll support if compiled without
+      inotify and dnotify (Ray Strode)</li>
+  <li>Portability: patches to allow compiling again on Hurd and kFreeBSD
+      (Michael Banck), patches to ease compilation on OS X (Brendan Cully)</li>
+</ul>
+<h3>0.1.8: Oct 31 2006</h3>
+<ul>
+  <li>Build and portability fixes: handle sys/inotify.h, Python detection
+      (Joseph Sacco), FreeBSD portability fix (Loïc Minier/Petr Salinger),
+      out of tree build and install (Loïc Minier), fix build with Sun's
+      compiler (James Andrewartha)</li>
+  <li>Bug fixes: pkg-config cflags (Claudio Fontana), debug signal hookup
+      fix (Bastien Nocera), client filedescriptor close trouble (Alexander
+      Larsson), low filedescriptor handling in the server (Alexander Larsson),
+      buffer on connection reset cleanup (Ariel T. Glenn), inotify new backend
+      fixes (Alexander Larsson)</li>
+  <li>Improvements: update the inotify backend to the version used by 
+      gnome-vfs (John McCutchan), minimize the timeouts usage
+      to not wake up apps unduely (Alexander Larsson)</li>
+</ul>
+<h3>0.1.7: Oct 27 2005</h3>
+<ul>
+  <li>Portability fixes (Diego Pettenò, Sjoerd Simons, Daichi Kawahata)</li>
+  <li>A small memory leak fix (Christopher Aillon)</li>
+  <li>Fixes for gam_server segfaults (Ed Catmur, DV)</li>
+  <li>One last patch for Python detection</li>
+</ul>
+<h3>0.1.6: Sep  8 2005</h3>
+<ul>
+  <li>Large revamp of the inotify back-end (John McCutchan)</li>
+  <li>Code reorganization, changes for polling (John McCutchan)</li>
+  <li>Portability patches for NetBSD (Johnny Lam)</li>
+  <li>Fix compilation without inotify</li>
+  <li>environment variable GAM_TEST_DNOTIFY to force dnotify on inotify kernels
+      (John McCutchan)</li>
+  <li>Inotify race conditions fixes (John McCutchan)</li>
+  <li>Removal of some asserts resulting in crashes</li>
+  <li>Applied some testing patches (TomPh)</li>
+  <li>Fixed a memory leak on inotify back-end</li>
+  <li>Python detection fix</li>
+</ul>
+<h3>0.1.5: Aug  9 2005</h3>
+<ul>
+  <li>Improvement of configuration, system wide configuration files and
+      per filesystem type default (John McCutchan)</li>
+  <li>Rewrite of the inotify back-end, reduce resources usage, tuning in
+      case of busy resources (John McCutchan)</li>
+  <li>Documentation updates</li>
+  <li>Changes to compile inotify back-end on various architectures</li>
+  <li>Debugging output improvements</li>
+</ul>
+<h3>0.1.3: Aug  2 2005</h3>
+<ul>
+  <li> Fix to compile on older gcc versions (Jean-Yves Lefort)</li>
+  <li> Inotify back-end changes and optimizations (John McCutchan)</li>
+  <li> Debug ouput cleanup, pid and process name reports (John McCutchan)</li>
+  <li> Dropped kernel monitor bugfix (John McCutchan)</li>
+  <li> Removed the old glist copy used for debugging</li>
+  <li> Maintain mounted filesystems knowledge, and per fstype preferences (John McCutchan)</li>
+</ul>
+<h3>0.1.2: Jul 13 2005</h3>
+<ul>
+  <li> More patches from John McCutchan for the inotify back-end, inotify
+       is now in Linus's kernel tree, a patch for the new kernel API was
+       needed.</li>
+  <li> Lot of cleanup patches from Neal H. Walfield affecting most of the
+       server code.</li>
+  <li> Fixed an authentication problem.</li>
+</ul>
+<h3>0.1.1: Jun 10 2005</h3>
+<ul>
+  <li> Bug fixes: gamin_data_conn_event (Mark McLoughlin),
+       crash from bug #303932 (Frederic Crozat),
+       Inotify and mounted media #171201 (John McCutchan),
+       monitoring multiple files in busy directories #159748
+       (mounted media did not show up on Desktop),
+       write may not be atomic (Neal H. Walfield),
+       Monitoring a directory when it is a file.
+  <li> Portability to Hurd/Mach and various code cleanups (Neal H. Walfield)
+  <li> Added support for ~ as user home alias in .gaminrc
+</ul>
+<h3>0.1.0: May 12 2005</h3>
+<ul>
+  <li>Close inherited file descriptors on exec of gam_server</li>
+  <li>Cancelling a monitor send back a FAMAcknowledge based on patch by
+      Christophe Saout</li>
+  <li>Fixed for big files &gt; 2GB</li>
+  <li>Bug when monitoring a non existing directory</li>
+  <li>Make client side thread safe (Nicholas Miell base patch)</li>
+  <li>Unreadable directory fixes (Nickolay Shmyrev)</li>
+  <li>A lot more regression tests, more debugging support and code
+      cleanups.</li>
+  <li>Better flow control handling</li>
+  <li>Updated to latest inotify version: 0.23-6 (John McCutchan, Todor Penev,
+      Andrei Lahun, Daniel Drake)</li>
+  <li>MacOSX/BSDs portability using kqueue (Joe Marcus Clarke, Fred Leason)</li>
+</ul>
+<h3>0.0.26: Mar 15 2005</h3>
+<ul>
+  <li>Fixed an include problem showing up with gcc4</li>
+  <li>A couple of documentation typo fixes</li>
+  <li>fixed the crash on failed tree assert bug #150471 based on patch from
+      Dean Brettle</li>
+  <li>removed an incompatibility with SGI FAM #149822</li>
+</ul>
+<h3>0.0.25: Mar  1 2005</h3>
+<ul>
+  <li>Fix a configure problem reported by Martin Schlemmer</li>
+  <li>Fix the /media/* and /mnt/* mount blocking problems from 0.0.24</li>
+  <li>Fix the monitoring of directory using poll and not kernel</li>
+</ul>
+<h3>0.0.24: Feb 18 2005</h3>
+<ul>
+  <li> more documentation</li>
+  <li> lot of serious bug fixes including Gnome Desktop refresh bug</li>
+  <li> extending the framework for more debug (configure --enable-debug-api)</li>
+  <li> extending the python bindings for watching the same resource multiple times and adding debug framework support</li>
+  <li> growing the regression tests a lot based on python bindings</li>
+  <li> inotify-0.19 patch from John McCutchan</li>
+  <li> renamed python private module to _gamin to follow Python PEP 8</li>
+</ul>
+<h3>0.0.23: Feb  8 2005</h3>
+<ul>
+  <li> memory corruption fix from Mark on the client side.</li>
+  <li> extending the protocol and API to allow skipping Exists and EndExists
+       events to avoid deadlock on reconnect or when they are not used
+       (all gam_servers should be killed after an update to 0.0.23).</li>
+</ul>
+<h3>0.0.22: Jan 31 2005</h3>
+<ul>
+  <li> Added Python regression test, and a python disconnect() operation.</li>
+  <li> Applied patches from John McCutchan to fix inotify 0.18 backend.</li>
+  <li> 3 bugs fixed.</li>
+</ul>
+<h3>0.0.21: Jan 26 2005</h3>
+<ul>
+  <li> Added Python bindings.</li>
+  <li> Applied patch from Philipp Zabel to switch to inotify 0.18
+       protocol. This won't work with older inotify kernel versions.</li>
+  <li> Doc fix (Mark McLoughlin).</li>
+  <li> Removal of compilation warnings.</li>
+</ul>
+
+<h3>0.0.20: Jan  6 2005</h3>
+<ul>
+  <li> Frederic Crozat seems to have found the list corruption bug
+       and provided a patch.</li>
+  <li> Frederic Crozat fixed the poll only mode.</li>
+</ul>
+
+<h3>0.0.19: Dec  3 2004</h3>
+<ul>
+  <li> still chasing the loop bug, made another pass at checking GList,
+  added own copy with memory poisonning of GList implementation.</li>
+  <li> fixed a compile issue when compiling without debug</li>
+  <li> Another internal bugfix.</li>
+</ul>
+
+<h3>0.0.18: Nov 26 2004</h3>
+<ul>
+  <li> still chasing the loop bug, checked and cleaned up all GList use</li>
+  <li> patch from markmc to minimize load on busy apps</li>
+</ul>
+
+<h3>0.0.16: Oct 20 2004</h3>
+<ul>
+  <li> chasing #132354, lot of debugging, checking and testing and a bit
+  of refactoring</li>
+</ul>
+
+<h3>0.0.15: Oct 16 2004</h3>
+<ul>
+  <li> workaround to detect loops and avoid the nasty effects, see RedHat bug #132354</li>
+</ul>
+
+<h3>0.0.14: Oct  3 2004</h3>
+<ul>
+  <li> Found and fixed the annoying bug where update were not received
+  should fix bugs ##132429, #133665 and #134413</li>
+  <li> new mechanism to debug on-the-fly by sending SIGUSR2 to client or server</li>
+  <li> Added documentation about internals</li>
+</ul>
+
+<h3>0.0.14: Oct  3 2004</h3>
+<ul>
+  <li>Found and fixed the annoying bug where update were not received should
+    fix bugs ##132429, #133665 and #134413 in Red Hat bugzilla</li>
+  <li>new mechanism to debug on-the-fly by sending SIGUSR2 to client or
+  server</li>
+  <li>Added documentation about internals</li>
+</ul>
+
+<h3>0.0.13: Oct  1 2004</h3>
+<ul>
+  <li>applied portability fixes</li>
+  <li>hardened the code while chasing a segfault</li>
+</ul>
+
+<h3>0.0.12: Sep 30 2004</h3>
+<ul>
+  <li>potential fix for a hard to reproduce looping problem.</li>
+</ul>
+
+<h3>0.0.11: Sep 27 2004</h3>
+<ul>
+  <li>inotify support compiled in by default</li>
+  <li>fix ABI FAM compatibility problems #133162</li>
+  <li>update to the latest version of inotify </li>
+</ul>
+
+<h3>0.0.10: Sep 21 2004</h3>
+<ul>
+  <li>fixed API/ABI incompatibility between FAM and gamin about FAMErrno and
+    FamErrlist</li>
+  <li>added support for a per-user configuration file $HOME/.gaminrc</li>
+  <li>applied a portability patch from Michael Banck</li>
+  <li>extended the documentation</li>
+</ul>
+
+<h3>0.0.9: Sep 1 2004</h3>
+<ul>
+  <li>fix konqueror crash Red Hat bug #130967</li>
+  <li>statically excludes /mnt//* /media//* from kernel monitoring to avoid
+    umount problems</li>
+</ul>
+
+<h3>0.0.8: Aug 26 2004</h3>
+<ul>
+  <li>inotify backend patch (Martin Schlemmer)</li>
+  <li>documentation</li>
+  <li>fixed 0.0.7 crashes</li>
+  <li>fixed the kernel/poll detection code which was buggy</li>
+</ul>
+
+<h3>0.0.7: Aug 24 2004</h3>
+<ul>
+  <li>increased the test suite</li>
+  <li>activate poll and kernel monitoring (dnotify) simultaneously</li>
+  <li>fix monitoring of resources initially missing</li>
+  <li>fix load problem due to dnotify on very busy resources</li>
+</ul>
+
+<h3>0.0.6: Aug 19 2004</h3>
+<ul>
+  <li>fix monitoring of file resources</li>
+  <li>moved gam_server to $libexec since it doesn't need to be started from
+    the command line usually</li>
+  <li>test and fixes on x86_64</li>
+  <li>removal all thread dependancies and conditional code</li>
+</ul>
+
+<h2><a name="Downloads">Downloads</a></h2>
+
+<p>You can download gamin from the GNOME project pages, either as <a
+href="http://www.gnome.org/~veillard/gamin/sources/">sources</a>, and <a
+href="http://www.gnome.org/~veillard/gamin/RPMS/">binaries</a> or <a
+href="http://www.gnome.org/~veillard/gamin/SRPMS/">source</a> RPMs.</p>
+
+<h2><a name="Python">Python bindings</a></h2>
+<p>Starting with release 0.0.21, gamin comes with Python bindings. Use "<span
+style="font-family: monospace;">import gamin</span>"
+to load the module. It exports the main class "<span
+style="font-family: monospace;">WatchMonitor</span>"
+which handle one connection to the gam_server. Once an instance of the
+class has been created you can use the watch_directory and watch_file
+methods to register objects to monitors, and provide the callback to be
+called when events are generated. Like the FAM API, the python binding
+API is passive, i.e. one need&nbsp; to&nbsp; monitor the file
+descriptor provided with the <span
+style="font-family: monospace;">get_fd()</span>
+method to detect events, and call <span
+style="font-family: monospace;">handle_one_event()</span>
+(blocking) or <span
+style="font-family: monospace;">handle_events()</span>
+(non-blocking) to process incoming events and get the callbacks
+appropriately. You can also use the <span
+style="font-family: monospace;">event_pending()</span>
+method to detect if <span
+style="font-family: monospace;">handle_one_event()</span>
+would block or not.<br>
+Since a short example is worth a thousand words, here is a small
+session from the python shell:</p>
+<pre>
+&gt;&gt;&gt; import gamin
+&gt;&gt;&gt;
+&gt;&gt;&gt; def callback(path, event):
+...     print "Got callback: %s, %s" % (path, event)
+...
+&gt;&gt;&gt; mon = gamin.WatchMonitor()
+&gt;&gt;&gt; mon.watch_directory(".", callback)
+&lt;gamin.WatchObject instance at 0xb7f7b56c&gt;
+&gt;&gt;&gt; mon.event_pending()
+1
+&gt;&gt;&gt; mon.handle_one_event()
+Got callback: /u/veillard/temp, 8
+1
+&gt;&gt;&gt; mon.handle_events()
+Got callback: bar1, 8
+Got callback: foo1, 8
+Got callback: /u/veillard/temp, 9
+3
+&gt;&gt;&gt; mon.stop_watch(".")
+&gt;&gt;&gt; del mon
+</pre>
+<p>The corresponding standalone code follows:</p>
+<pre>#!/usr/bin/env python
+
+import gamin
+import time
+
+def callback(path, event):
+    print "Got callback: %s, %s" % (path, event)
+
+mon = gamin.WatchMonitor()
+mon.watch_directory(".", callback)
+time.sleep(1)
+ret = mon.event_pending()
+if ret &gt; 0:
+    ret = mon.handle_one_event()
+    ret = mon.handle_events()
+mon.stop_watch(".")
+del mon
+</pre>
+<p>Note the addition of the sleep timeout, it is needed because due to the round trip between the client and the gam_server, events may not be immediately available after the monitor creation to the client.</p>
+
+<h2><a name="Developers">Developers</a> informations</h2>
+
+<p>The CVS base is in the <a href="http://www.gnome.org/">GNOME</a> project
+CVS base at cvs.gnome.org, the module name is <a
+href="http://cvs.gnome.org/viewcvs/gamin/"><strong>gamin</strong></a>. See
+the <a href="http://developer.gnome.org/tools/cvs.html">Gnome CVS Tools</a>
+page for more information on using CVS.</p>
+
+<p>We expect bug reports to be entered in <a
+href="http://bugzilla.gnome.org/buglist.cgi?product=gamin&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=NEEDINFO&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;form_name=query">GNOME
+bugzilla</a> or in <a
+href="https://bugzilla.redhat.com/bugzilla/buglist.cgi?product=Fedora+Core&amp;product=Red+Hat+Enterprise+Linux&amp;component=fam&amp;component=gamin&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=MODIFIED&amp;short_desc_type=allwordssubstr&amp;short_desc=&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;Search=Search">Red
+Hat bugzilla</a>.</p>
+
+<h2><a name="Contacts">Contacts</a></h2>
+
+<p>The best way to contact the developers is to use the mailing-list <a
+href="http://mail.gnome.org/mailman/listinfo/gamin-list">gamin-list@gnome.org</a>.</p>
+
+<p>Before reporting a bug please double-check:</p>
+<ul>
+  <li>that you are using the <a
+    href="http://www.gnome.org/~veillard/gamin/sources/">latest
+  version</a></li>
+  <li>that the bug hasn't been reported previously in <a
+    href="http://bugzilla.gnome.org/buglist.cgi?product=gamin&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=NEEDINFO&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;form_name=query">GNOME</a>
+    or <a
+    href="https://bugzilla.redhat.com/bugzilla/buglist.cgi?product=Fedora+Core&amp;product=Red+Hat+Enterprise+Linux&amp;component=fam&amp;component=gamin&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=MODIFIED&amp;short_desc_type=allwordssubstr&amp;short_desc=&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;Search=Search">Red
+    Hat</a> bugzillas.</li>
+</ul>
+
+<p>Then the best way is to log the bug in one of the bugzilla or <a
+href="http://mail.gnome.org/mailman/listinfo/gamin-list">join the list</a>
+and post there if you think that some of gamin design or code should be
+changed. If you can provide a <a href="debug.html">testgam</a> scenario
+reproducing the problem this would really help getting it debugged and fixed,
+see examples in tests/scenario/ .</p>
+
+<h2><a name="FAQ">FAQ</a></h2>
+
+<p>This will be created as user feedback is provided.</p>
+
+<h2><a name="Debug">Debugging Gamin</a></h2>
+<ul>
+  <li><a href="#Debugging">Debugging support in gamin</a></li>
+  <li><a href="#Debugging1">Debugging a running program</a></li>
+  <li><a href="#Debugging2">Debugging and testing client</a></li>
+</ul>
+
+<h3><a name="Debugging">Debugging support in gamin</a>:</h3>
+
+<p>Both the client and server side, if compiled with debug support accept an
+environment variable <strong>GAM_DEBUG</strong> which is set will make them
+report debugging informations to stdout.</p>
+
+<p>Usually for debugging you also want to use a dedicated server process so
+setting the <strong>GAM_CLIENT_ID</strong> environment allows to ensure this.
+Usually one also want to keep control over the server lifetime and not have
+it exit automatically after 30 seconds without connection, there is a command
+line flag <strong>--notimeout</strong> to <strong>gam_server</strong> for
+this.</p>
+
+<p>A typical example of a debugging session using 2 shells would be:</p>
+<pre>shell1: export GAM_DEBUG=
+shell1: gam_server --notimeout test</pre>
+
+<p>to run the server in debug mode using the ID "test"</p>
+<pre>shell2: export GAM_DEBUG=
+shell2: export GAM_CLIENT_ID=test
+shell2: gamin_client</pre>
+
+<p>to run the client in a verbose session. It is perfectly possible to also
+run the client under a debugger, for the server it works too except the
+dnotify kernel interface uses a signal SIG33 which is trapped by gdb. To
+avoid this use the handle gdb instruction:</p>
+<pre>(gdb) handle SIG33 nostop
+Signal        Stop      Print   Pass to program Description
+SIG33         No        Yes     Yes             Real-time event 33
+(gdb)</pre>
+
+<p>even better add it to your <strong>$HOME/.gdbinit</strong> .</p>
+
+<h3><a name="Debugging1">Debugging a running program</a>:</h3>
+
+<p>Both the gam_server and client of the gamin library can get switched
+dynamically to a debug mode by sending them a signal SIGUSR2. In that case
+the program or library switches to verbose debugging and outputs the traces
+to a new file /tmp/gamin_debug_XXXXXX . Sending the signal again to the
+application or the server should switch off debugging.</p>
+
+<h3><a name="Debugging2">Debugging and testing client</a>:</h3>
+
+<p>A debugging client program called <strong>testgam</strong> is also
+available in the tests subdirectory. It allow to use the interface and
+monitor the flow of event received. Here is an example of a session:</p>
+<pre>paphio:~/gamin/tests -&gt; export GAMIN_DEBUG_SERVER="../server/gam_server"
+paphio:~/gamin/tests -&gt; ./testgam -
+&gt; connect test
+connected to test
+&gt;</pre>
+
+<p>The environment variable can be used to specify the path to the server to
+run, then <strong>testgam</strong> is launched in interactive mode (argument
+<strong>-</strong> ) and the program is asked to connect to the server for
+session test (the server will be started on-demand by the library if
+needed).</p>
+<pre>&gt; mkdir temp
+mkdir temp
+&gt; mkfile temp/foo
+mkfile temp/foo
+&gt; mondir temp
+mondir temp 0
+&gt;
+1: /u/veillard/gamin/tests/temp Exists: NULL
+1: foo Exists: NULL
+1: /u/veillard/gamin/tests/temp EndExist: NULL
+&gt; mkfile temp/bar
+mkfile temp/bar
+&gt;
+1: bar Created: NULL
+&gt; rmfile temp/foo
+rmfile temp/foo
+&gt;
+1: foo Deleted: NULL
+&gt;</pre>
+
+<p>In this example a new directory is created with a file in it and then
+monitored, then the directory content is modified. The
+<strong>testgam</strong> program also poll and report events coming from the
+server as they arrive.</p>
+
+<h2><a name="Security">Security</a></h2>
+
+<p>While gamin still use a server to provide the service (ideally if the
+kernel had a proper interface a library only implementation should be doable
+and possibly better), it tries to avoid security hazard associated to
+contacting an external server process:</p>
+<ul>
+  <li>the server runs under the same privilege level as the client, by
+    running under the uid, no root or superuser access is involved, this is
+    checked by both side using kernel support for the checking</li>
+  <li>when possible (e.g. on Linux) the socket used to communicate is not
+    mapped at the filesystem level to avoid risks related to opening a real
+    file, if the kernel doesn't allow this a per user directory holding the
+    socket is used and appropriate rights are checked.</li>
+  <li>to limit DoS attacks done by continuously modifying a monitored
+    resource, the daemon will switch back monitoring of very busy resources
+    to polling with generation of events only once per second.</li>
+</ul>
+
+<p>Here is the process used to acquire and create the sockets:</p>
+
+<h3>If there is abstract socket support:</h3>
+
+<p>Use the filename "\0/tmp/fam-$USER-$GAM_CLIENT_ID". They are not mapped on
+the filesystem, no attack is possible that way. The client and the server
+checks on the first '\0' byte received from the socket that the other side is
+running under the same UID.</p>
+
+<h3>If there is no abstract socket support:</h3>
+
+<p>On the server side:</p>
+<pre> start:
+  try to create /tmp/fam-$USER using mkdir('/tmp/fam-$USER', 007)
+  if error:
+      make a stat() on it
+      if doesn't exist:
+          return failure to create
+      if user is not getuid() or mode is not 007 or type is not dir:
+          try to unlink()
+          if error:
+              exit with error.
+          if success:
+              goto start:
+                                                                                
+  do the socket()/bind() on /tmp/fam-$USER/fam-$GAM_CLIENT_ID</pre>
+
+<p>On the client side:</p>
+<pre>  make a stat on /tmp/fam-$USER
+  if doesn't exist:
+      return failure to create should start the server
+  if user is not getuid() or mode is not 007 or type is not dir:
+      try to unlink()
+      if error:
+          exit with error.
+      if success:
+          return failure should start the server
+  make a stat on /tmp/fam-$USER/fam-$GAM_CLIENT_ID
+  if doesn't exist:
+      return failure to create should start the server
+  if user is not getuid() or type is not socket:
+      try to unlink()
+      if error:
+          exit with error.
+      if success:
+          return failure should start the server
+                                                                                
+  do the socket()/connect() on /tmp/fam-$USER/fam-$GAM_CLIENT_ID</pre>
+
+<p>The client and the server checks on the first '\0' byte received that the
+other side is of the same UID.</p>
+
+<h2><a name="Internals">Internals</a></h2>
+
+<p>gamin uses a client server model, this is in a large measure justified by
+the inappropriate dnotify kernel API way to signal modification events to an
+application but also to share kernel signal when multiple application
+monitors the same resource. It also allow to fine tune and filters event flow
+in the daemon, potentially minimizing resource consumption in
+applications.</p>
+
+<p><img src="client_server.gif" alt="One server and two client connected"></p>
+
+<p>Internally the gam_server maintain various data structures:</p>
+<ul>
+  <li>A tree of monitored nodes, using both GamNode structure containing
+    specific informations (like the path, the subscriptions list for that
+    node, monitoring data and whether it's a directory), the tree itself is
+    based on a GNode N-ary tree.</li>
+  <li>Per connection data (GamConnData) one per connected socket. The data
+    includes state, connection informations (file descriptor, Glib I/O
+    Channel, pid of the application), and potential unprocessed yet data
+    request from the socket.</li>
+  <li>Listener information, keeps the list of subscriptions for the connected
+    application, this could probably be merged in the connection data.</li>
+  <li>For each path monitored by an application, a specific GamSubscription
+    structure is maintained. The subscriptions are referenced both from the
+    monitored nodes tree and from the listeners.</li>
+</ul>
+
+<p><img src="server_structs.gif"
+alt="the data structures present in the server"></p>
+
+<p></p>
+<h2><a name="Differences">Differences from FAM</a></h2>
+
+<h3>Differences</h3>
+<p>gamin should be binary and source code compatible with FAM 2.6.8.
+However there are some differences and at least one significant 
+extension.</p>
+<p>The differences are in term of implementation:</p>
+<ul>
+<li>No system wide server, instead it relies on per user server, if
+needed started on demand by the fam/gamin library.</li>
+<li>The functions FAMSuspendMonitor(), FAMResumeMonitor() and
+    FAMMonitorCollection() are not implemented. They all raise problem
+    of accumulating unbounded state on the server side and better handled
+    at the client level if needed.</li>
+<li>FAMErrno is provided, but the values may not match their FAM
+counterparts, similary FamErrlist[] error messages are different.</li>
+<li>No NFS support based on specific RPC and server, instead gamin monitors
+only the state as reported locally by the kernel, not that locally done
+changes on NFS or AFS filesystems are reported on Linux which is the
+main criteria when having user home directories on such filesystems.</li>
+</ul>
+<h3>Extension(s)</h3>
+<p>We tried to limit changes in gamin but a number of features were
+deemed more important than sticking to the exact same set than FAM:</p>
+<ul>
+<li>Support for inotify on Linux if compiled in the kernel, this override
+most of the deficiencies related to dnotify.</li>
+<li>A lot of debugging support was added both for client and server
+see the <a href="debug.html">specific page</a> on the matter.</li>
+<li>The possibility to block Exist/EndExists callbacks when monitoring
+directories based on a new API, see below</li>
+</ul>
+<p>FAM when monitoring a directory, immediately send a set of events
+listing the files found in that directory, this ends up with an EndExists
+events. However when monitoring hierarchy it's usually far more efficient
+and simple to do the scanning on the client side and ignore those 
+directory listing events from the FAM server (the only drawback is a potential
+mismatch of the directory content between the FAM server and the client).
+In such a case, all those events are not only superfluous but they are
+also dangerous since they can lead to a congested pipe to the client
+which is just scanning directories and not listening to FAM. To that
+intent we added in gamin 0.0.23 a new API disabling the Exists/EndExists
+sequences when watching directories for a given FAMConnection:</p>
+<pre>int FAMNoExists(FAMConnection *fc)</pre>
+<p>and with the Python bindings:</p>
+<pre>WatchMonitor.no_exists()</pre>
+<p>This feature is also used when the client reconnect to the server
+after a connection loss or if the server died.</p>
+<p>Calling it changes the protocol as described below, directory 
+monitoring from that call will only get mutation events and not
+the initial lists:</p>
+<p><img src="callbacks.gif" alt="The NoExists behaviour change on callbacks"></p>
+
+</body>
+</html>

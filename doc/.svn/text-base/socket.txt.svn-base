@@ -1,0 +1,55 @@
+If there is abstract socket support:
+====================================
+
+  use them as "\0/tmp/fam-$USER-$GAM_CLIENT_ID"
+  They are not mapped on the filesystem, no attack is possible that way.
+  The client and the server checks on the first '\0' byte received that
+  the other side is of the same UID
+
+If there is no abstract socket support:
+=======================================
+
+Server side:
+------------
+
+start:
+  try to create /tmp/fam-$USER using mkdir('/tmp/fam-$USER', 007)
+  if error:
+      make a stat() on it
+      if doesn't exist:
+          return failure to create
+      if user is not getuid() or mode is not 007 or type is not dir:
+          try to unlink()
+	  if error:
+	      exit with error.
+	  if success:
+	      goto start:
+ 
+  do the socket()/bind() on /tmp/fam-$USER/fam-$GAM_CLIENT_ID
+  
+Client side:
+------------
+
+  make a stat on /tmp/fam-$USER
+  if doesn't exist:
+      return failure to create should start the server
+  if user is not getuid() or mode is not 007 or type is not dir:
+      try to unlink()
+      if error:
+          exit with error.
+      if success:
+          return failure should start the server
+  make a stat on /tmp/fam-$USER/fam-$GAM_CLIENT_ID
+  if doesn't exist:
+      return failure to create should start the server
+  if user is not getuid() or type is not socket:
+      try to unlink()
+      if error:
+          exit with error.
+      if success:
+          return failure should start the server
+
+  do the socket()/connect() on /tmp/fam-$USER/fam-$GAM_CLIENT_ID
+
+  The client and the server checks on the first '\0' byte received that
+  the other side is of the same UID.

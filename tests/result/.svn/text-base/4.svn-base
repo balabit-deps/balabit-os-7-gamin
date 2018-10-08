@@ -1,0 +1,17 @@
+mkdir /tmp/test_gamin
+mkfile /tmp/test_gamin/foo
+connected to test
+mondir /tmp/test_gamin 0
+1: /tmp/test_gamin Exists: NULL
+1: foo Exists: NULL
+1: /tmp/test_gamin EndExist: NULL
+append /tmp/test_gamin/foo
+1: foo Changed: NULL
+killall gam_server
+no events
+append /tmp/test_gamin/foo
+1: foo Changed: NULL
+rmfile /tmp/test_gamin/foo
+1: foo Deleted: NULL
+disconnected
+rmdir /tmp/test_gamin

@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: gamin
+Description: The gamin file monitoring system.
+Version: @GAMIN_VERSION@
+Libs: -L${libdir} -lgamin-1
+Cflags: -I${includedir}

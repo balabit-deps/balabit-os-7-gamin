@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /><style type="text/css">
+TD {font-family: Verdana,Arial,Helvetica}
+BODY {font-family: Verdana,Arial,Helvetica; margin-top: 2em; margin-left: 0em; margin-right: 0em}
+H1 {font-family: Verdana,Arial,Helvetica}
+H2 {font-family: Verdana,Arial,Helvetica}
+H3 {font-family: Verdana,Arial,Helvetica}
+A:link, A:visited, A:active { text-decoration: underline }
+</style><title>News</title></head><body bgcolor="#8b7765" text="#000000" link="#a06060" vlink="#000000"><table border="0" width="100%" cellpadding="5" cellspacing="0" align="center"><tr><td width="120"></td><td><table border="0" width="90%" cellpadding="2" cellspacing="0" align="center" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3" bgcolor="#fffacd"><tr><td align="center"><h1>Gamin the File Alteration Monitor</h1><h2>News</h2></td></tr></table></td></tr></table></td></tr></table><table border="0" cellpadding="4" cellspacing="0" width="100%" align="center"><tr><td bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="2" width="100%"><tr><td valign="top" width="200" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Main Menu</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="using.html">Using gamin</a></li><li><a href="config.html">Configuration</a></li><li><a href="news.html">News</a></li><li><a href="downloads.html">Downloads</a></li><li><a href="python.html">Python bindings</a></li><li><a href="devel.html">Developers informations</a></li><li><a href="contacts.html">Contacts</a></li><li><a href="FAQ.html">FAQ</a></li><li><a href="debug.html">Debugging Gamin</a></li><li><a href="security.html">Security</a></li><li><a href="internals.html">Internals</a></li><li><a href="differences.html">Differences from FAM</a></li><li><a href="ChangeLog.html">ChangeLog</a></li></ul></td></tr></table><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Related links</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="http://mail.gnome.org/archives/gamin-list/">Mail archive</a></li><li><a href="http://oss.sgi.com/projects/fam/">FAM project</a></li><li><a href="sources/">sources</a></li><li><a href="http://bugzilla.gnome.org/buglist.cgi?product=gamin&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=NEEDINFO&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;form_name=query">GNOME Bugzilla</a></li><li><a href="https://bugzilla.redhat.com/bugzilla/buglist.cgi?product=Fedora+Core&amp;product=Red+Hat+Enterprise+Linux&amp;component=fam&amp;component=gamin&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=MODIFIED&amp;short_desc_type=allwordssubstr&amp;short_desc=&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;Search=Search">Red Hat Bugzilla</a></li></ul></td></tr></table></td></tr></table></td><td valign="top" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%"><tr><td><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td bgcolor="#fffacd"><h3>0.1.10: Nov 24 2008</h3><ul><li>Portability fixes: configure fixes (Daniel Drake), configure extension
+      detection (Dodji Seketeli), missing quotes in acinclude (Daichi Kawahata),
+      daemon build flags (Rémi Cardona), drop glib dependency for libgamin
+      (Rémi Cardona), python bindings install (Rémi Cardona), system inotify
+      detection and use (Adrian Bunk)</li>
+  <li>Bug fixes: parent recursing on missing watch (Ray Strode), memory
+      leak when releasing fses (Matthias Clasen)</li>
+  <li>Improvement: API and ABI missing entry points (Ryan Underwood),
+      configure switches for just server or lib build (Rémi Cardona)</li>
+</ul><h3>0.1.9: Jul 27 2007</h3><ul><li>Bug fixes: enable polling when using inotify this fixes support for NFS 
+      partitions (Alexander Larsson), do not run idle handler if not needed
+      reduce wakeups (Alexander Larsson), handling of failure of inotify
+      initialization (Robert Clark), force poll support if compiled without
+      inotify and dnotify (Ray Strode)</li>
+  <li>Portability: patches to allow compiling again on Hurd and kFreeBSD
+      (Michael Banck), patches to ease compilation on OS X (Brendan Cully)</li>
+</ul><h3>0.1.8: Oct 31 2006</h3><ul><li>Build and portability fixes: handle sys/inotify.h, Python detection
+      (Joseph Sacco), FreeBSD portability fix (Loïc Minier/Petr Salinger),
+      out of tree build and install (Loïc Minier), fix build with Sun's
+      compiler (James Andrewartha)</li>
+  <li>Bug fixes: pkg-config cflags (Claudio Fontana), debug signal hookup
+      fix (Bastien Nocera), client filedescriptor close trouble (Alexander
+      Larsson), low filedescriptor handling in the server (Alexander Larsson),
+      buffer on connection reset cleanup (Ariel T. Glenn), inotify new backend
+      fixes (Alexander Larsson)</li>
+  <li>Improvements: update the inotify backend to the version used by 
+      gnome-vfs (John McCutchan), minimize the timeouts usage
+      to not wake up apps unduely (Alexander Larsson)</li>
+</ul><h3>0.1.7: Oct 27 2005</h3><ul><li>Portability fixes (Diego Pettenò, Sjoerd Simons, Daichi Kawahata)</li>
+  <li>A small memory leak fix (Christopher Aillon)</li>
+  <li>Fixes for gam_server segfaults (Ed Catmur, DV)</li>
+  <li>One last patch for Python detection</li>
+</ul><h3>0.1.6: Sep  8 2005</h3><ul><li>Large revamp of the inotify back-end (John McCutchan)</li>
+  <li>Code reorganization, changes for polling (John McCutchan)</li>
+  <li>Portability patches for NetBSD (Johnny Lam)</li>
+  <li>Fix compilation without inotify</li>
+  <li>environment variable GAM_TEST_DNOTIFY to force dnotify on inotify kernels
+      (John McCutchan)</li>
+  <li>Inotify race conditions fixes (John McCutchan)</li>
+  <li>Removal of some asserts resulting in crashes</li>
+  <li>Applied some testing patches (TomPh)</li>
+  <li>Fixed a memory leak on inotify back-end</li>
+  <li>Python detection fix</li>
+</ul><h3>0.1.5: Aug  9 2005</h3><ul><li>Improvement of configuration, system wide configuration files and
+      per filesystem type default (John McCutchan)</li>
+  <li>Rewrite of the inotify back-end, reduce resources usage, tuning in
+      case of busy resources (John McCutchan)</li>
+  <li>Documentation updates</li>
+  <li>Changes to compile inotify back-end on various architectures</li>
+  <li>Debugging output improvements</li>
+</ul><h3>0.1.3: Aug  2 2005</h3><ul><li> Fix to compile on older gcc versions (Jean-Yves Lefort)</li>
+  <li> Inotify back-end changes and optimizations (John McCutchan)</li>
+  <li> Debug ouput cleanup, pid and process name reports (John McCutchan)</li>
+  <li> Dropped kernel monitor bugfix (John McCutchan)</li>
+  <li> Removed the old glist copy used for debugging</li>
+  <li> Maintain mounted filesystems knowledge, and per fstype preferences (John McCutchan)</li>
+</ul><h3>0.1.2: Jul 13 2005</h3><ul><li> More patches from John McCutchan for the inotify back-end, inotify
+       is now in Linus's kernel tree, a patch for the new kernel API was
+       needed.</li>
+  <li> Lot of cleanup patches from Neal H. Walfield affecting most of the
+       server code.</li>
+  <li> Fixed an authentication problem.</li>
+</ul><h3>0.1.1: Jun 10 2005</h3><ul><li> Bug fixes: gamin_data_conn_event (Mark McLoughlin),
+       crash from bug #303932 (Frederic Crozat),
+       Inotify and mounted media #171201 (John McCutchan),
+       monitoring multiple files in busy directories #159748
+       (mounted media did not show up on Desktop),
+       write may not be atomic (Neal H. Walfield),
+       Monitoring a directory when it is a file.
+  </li><li> Portability to Hurd/Mach and various code cleanups (Neal H. Walfield)
+  </li><li> Added support for ~ as user home alias in .gaminrc
+</li></ul><h3>0.1.0: May 12 2005</h3><ul><li>Close inherited file descriptors on exec of gam_server</li>
+  <li>Cancelling a monitor send back a FAMAcknowledge based on patch by
+      Christophe Saout</li>
+  <li>Fixed for big files &gt; 2GB</li>
+  <li>Bug when monitoring a non existing directory</li>
+  <li>Make client side thread safe (Nicholas Miell base patch)</li>
+  <li>Unreadable directory fixes (Nickolay Shmyrev)</li>
+  <li>A lot more regression tests, more debugging support and code
+      cleanups.</li>
+  <li>Better flow control handling</li>
+  <li>Updated to latest inotify version: 0.23-6 (John McCutchan, Todor Penev,
+      Andrei Lahun, Daniel Drake)</li>
+  <li>MacOSX/BSDs portability using kqueue (Joe Marcus Clarke, Fred Leason)</li>
+</ul><h3>0.0.26: Mar 15 2005</h3><ul><li>Fixed an include problem showing up with gcc4</li>
+  <li>A couple of documentation typo fixes</li>
+  <li>fixed the crash on failed tree assert bug #150471 based on patch from
+      Dean Brettle</li>
+  <li>removed an incompatibility with SGI FAM #149822</li>
+</ul><h3>0.0.25: Mar  1 2005</h3><ul><li>Fix a configure problem reported by Martin Schlemmer</li>
+  <li>Fix the /media/* and /mnt/* mount blocking problems from 0.0.24</li>
+  <li>Fix the monitoring of directory using poll and not kernel</li>
+</ul><h3>0.0.24: Feb 18 2005</h3><ul><li> more documentation</li>
+  <li> lot of serious bug fixes including Gnome Desktop refresh bug</li>
+  <li> extending the framework for more debug (configure --enable-debug-api)</li>
+  <li> extending the python bindings for watching the same resource multiple times and adding debug framework support</li>
+  <li> growing the regression tests a lot based on python bindings</li>
+  <li> inotify-0.19 patch from John McCutchan</li>
+  <li> renamed python private module to _gamin to follow Python PEP 8</li>
+</ul><h3>0.0.23: Feb  8 2005</h3><ul><li> memory corruption fix from Mark on the client side.</li>
+  <li> extending the protocol and API to allow skipping Exists and EndExists
+       events to avoid deadlock on reconnect or when they are not used
+       (all gam_servers should be killed after an update to 0.0.23).</li>
+</ul><h3>0.0.22: Jan 31 2005</h3><ul><li> Added Python regression test, and a python disconnect() operation.</li>
+  <li> Applied patches from John McCutchan to fix inotify 0.18 backend.</li>
+  <li> 3 bugs fixed.</li>
+</ul><h3>0.0.21: Jan 26 2005</h3><ul><li> Added Python bindings.</li>
+  <li> Applied patch from Philipp Zabel to switch to inotify 0.18
+       protocol. This won't work with older inotify kernel versions.</li>
+  <li> Doc fix (Mark McLoughlin).</li>
+  <li> Removal of compilation warnings.</li>
+</ul><h3>0.0.20: Jan  6 2005</h3><ul><li> Frederic Crozat seems to have found the list corruption bug
+       and provided a patch.</li>
+  <li> Frederic Crozat fixed the poll only mode.</li>
+</ul><h3>0.0.19: Dec  3 2004</h3><ul><li> still chasing the loop bug, made another pass at checking GList,
+  added own copy with memory poisonning of GList implementation.</li>
+  <li> fixed a compile issue when compiling without debug</li>
+  <li> Another internal bugfix.</li>
+</ul><h3>0.0.18: Nov 26 2004</h3><ul><li> still chasing the loop bug, checked and cleaned up all GList use</li>
+  <li> patch from markmc to minimize load on busy apps</li>
+</ul><h3>0.0.16: Oct 20 2004</h3><ul><li> chasing #132354, lot of debugging, checking and testing and a bit
+  of refactoring</li>
+</ul><h3>0.0.15: Oct 16 2004</h3><ul><li> workaround to detect loops and avoid the nasty effects, see RedHat bug #132354</li>
+</ul><h3>0.0.14: Oct  3 2004</h3><ul><li> Found and fixed the annoying bug where update were not received
+  should fix bugs ##132429, #133665 and #134413</li>
+  <li> new mechanism to debug on-the-fly by sending SIGUSR2 to client or server</li>
+  <li> Added documentation about internals</li>
+</ul><h3>0.0.14: Oct  3 2004</h3><ul><li>Found and fixed the annoying bug where update were not received should
+    fix bugs ##132429, #133665 and #134413 in Red Hat bugzilla</li>
+  <li>new mechanism to debug on-the-fly by sending SIGUSR2 to client or
+  server</li>
+  <li>Added documentation about internals</li>
+</ul><h3>0.0.13: Oct  1 2004</h3><ul><li>applied portability fixes</li>
+  <li>hardened the code while chasing a segfault</li>
+</ul><h3>0.0.12: Sep 30 2004</h3><ul><li>potential fix for a hard to reproduce looping problem.</li>
+</ul><h3>0.0.11: Sep 27 2004</h3><ul><li>inotify support compiled in by default</li>
+  <li>fix ABI FAM compatibility problems #133162</li>
+  <li>update to the latest version of inotify </li>
+</ul><h3>0.0.10: Sep 21 2004</h3><ul><li>fixed API/ABI incompatibility between FAM and gamin about FAMErrno and
+    FamErrlist</li>
+  <li>added support for a per-user configuration file $HOME/.gaminrc</li>
+  <li>applied a portability patch from Michael Banck</li>
+  <li>extended the documentation</li>
+</ul><h3>0.0.9: Sep 1 2004</h3><ul><li>fix konqueror crash Red Hat bug #130967</li>
+  <li>statically excludes /mnt//* /media//* from kernel monitoring to avoid
+    umount problems</li>
+</ul><h3>0.0.8: Aug 26 2004</h3><ul><li>inotify backend patch (Martin Schlemmer)</li>
+  <li>documentation</li>
+  <li>fixed 0.0.7 crashes</li>
+  <li>fixed the kernel/poll detection code which was buggy</li>
+</ul><h3>0.0.7: Aug 24 2004</h3><ul><li>increased the test suite</li>
+  <li>activate poll and kernel monitoring (dnotify) simultaneously</li>
+  <li>fix monitoring of resources initially missing</li>
+  <li>fix load problem due to dnotify on very busy resources</li>
+</ul><h3>0.0.6: Aug 19 2004</h3><ul><li>fix monitoring of file resources</li>
+  <li>moved gam_server to $libexec since it doesn't need to be started from
+    the command line usually</li>
+  <li>test and fixes on x86_64</li>
+  <li>removal all thread dependancies and conditional code</li>
+</ul><p><a href="contacts.html">Daniel Veillard</a></p></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></body></html>

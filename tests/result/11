@@ -1,0 +1,9 @@
+mkdir /tmp/test_gamin
+chmod /tmp/test_gamin to 000
+connected to test
+mondir /tmp/test_gamin 0
+1: /tmp/test_gamin Exists: NULL
+1: /tmp/test_gamin EndExist: NULL
+disconnected
+chmod /tmp/test_gamin to 755
+rmdir /tmp/test_gamin

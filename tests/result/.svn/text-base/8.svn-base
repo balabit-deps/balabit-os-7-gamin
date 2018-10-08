@@ -1,0 +1,12 @@
+connected to test
+mondir /tmp/test_gamin 0
+1: /tmp/test_gamin Deleted: NULL
+1: /tmp/test_gamin EndExist: NULL
+mkdir /tmp/test_gamin
+1: /tmp/test_gamin Created: NULL
+mkfile /tmp/test_gamin/foo
+1: foo Created: NULL
+rmfile /tmp/test_gamin/foo
+1: foo Deleted: NULL
+disconnected
+rmdir /tmp/test_gamin

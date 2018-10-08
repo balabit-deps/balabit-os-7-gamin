@@ -1,0 +1,611 @@
+dnl Process this file with autoconf to produce a configure script.
+AC_PREREQ(2.52)
+AC_INIT(libgamin)
+AM_CONFIG_HEADER(config.h)
+AC_CANONICAL_SYSTEM
+
+# get any external flags setting before we start playing with the CFLAGS variable
+ENV_CFLAGS="$CFLAGS"
+
+GAMIN_MAJOR_VERSION=0
+GAMIN_MINOR_VERSION=1
+GAMIN_MICRO_VERSION=10
+GAMIN_VERSION=$GAMIN_MAJOR_VERSION.$GAMIN_MINOR_VERSION.$GAMIN_MICRO_VERSION$GAMIN_MICRO_VERSION_SUFFIX
+GAMIN_VERSION_INFO=`expr $GAMIN_MAJOR_VERSION + $GAMIN_MINOR_VERSION`:$GAMIN_MICRO_VERSION:$GAMIN_MINOR_VERSION
+
+AC_SUBST(GAMIN_MAJOR_VERSION)
+AC_SUBST(GAMIN_MINOR_VERSION)
+AC_SUBST(GAMIN_MICRO_VERSION)
+AC_SUBST(GAMIN_VERSION)
+AC_SUBST(GAMIN_VERSION_INFO)
+
+FAM_VERSION_INFO="0:0:0"
+
+AC_SUBST(FAM_VERSION_INFO)
+
+VERSION=${GAMIN_VERSION}
+
+AM_INIT_AUTOMAKE(gamin, $VERSION)
+
+AM_PROG_LIBTOOL
+
+AC_USE_SYSTEM_EXTENSIONS
+AC_PROG_CC
+AM_PROG_CC_STDC
+AC_HEADER_STDC
+AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+
+dnl If the user set no CFLAGS, then don't assume the autotools defaults of
+dnl "-g -O2". We set default CFLAGS later based on the --disable-debug flag.
+if test -z "$ENV_CFLAGS"; then
+	CFLAGS=""
+fi
+
+dnl for the spec file
+RELDATE=`date +'%a %b %e %Y'`
+AC_SUBST(RELDATE)
+
+AC_ARG_ENABLE(docs,
+	AC_HELP_STRING([--enable-docs], [Build documentation (requires Doxygen)]),
+	[build_docs="${enableval}"], [build_docs=no])
+
+AM_CONDITIONAL(BUILD_DOCS, test x$build_docs = xyes)
+
+##################################################
+# Check for gtk-doc.
+##################################################
+
+AC_ARG_WITH(html-dir, [  --with-html-dir=PATH path to installed docs ])
+
+if test "x$with_html_dir" = "x" ; then
+  HTML_DIR='${datadir}/gtk-doc/html'
+else
+  HTML_DIR=$with_html_dir
+fi
+
+AC_SUBST(HTML_DIR)
+
+gtk_doc_min_version=1.0
+AC_MSG_CHECKING([gtk-doc version >= $gtk_doc_min_version])
+if pkg-config --atleast-version=$gtk_doc_min_version gtk-doc; then
+  AC_MSG_RESULT(yes)
+  GTKDOC=true
+else
+  AC_MSG_RESULT(no)
+  GTKDOC=false
+fi
+
+dnl Let people disable the gtk-doc stuff.
+AC_ARG_ENABLE(gtk-doc, 
+	AC_HELP_STRING([--enable-gtk-doc],  [Use gtk-doc to build documentation (default=auto)]),
+	[enable_gtk_doc="$enableval"], [enable_gtk_doc=auto])
+
+if test x$enable_gtk_doc = xauto -o x$enable_gtk_doc = xyes ; then
+  if test x$GTKDOC = xtrue ; then
+    enable_gtk_doc=yes
+  else
+    enable_gtk_doc=no 
+  fi
+fi
+
+AM_CONDITIONAL(ENABLE_GTK_DOC, test x$enable_gtk_doc = xyes)
+
+AC_CHECK_FUNCS(usleep setsid setenv putenv getlogin_r)
+AC_STRUCT_ST_MTIM_NSEC
+
+
+dnl
+dnl libgamin/libfam configuration
+dnl
+AC_ARG_ENABLE(libgamin,
+	AC_HELP_STRING([--enable-libgamin], [Build libgamin/libfam (default=yes)]),
+	[enable_libgamin="$enableval"], [enable_libgamin=yes])
+AM_CONDITIONAL(BUILD_LIBGAMIN, test x$enable_libgamin = xyes)
+
+
+dnl
+dnl Server configuration
+dnl
+AC_ARG_ENABLE(server,
+	AC_HELP_STRING([--enable-server], [Build gam_server (default=yes)]),
+	[enable_server="$enableval"], [enable_server=yes])
+
+if test x$enable_server = xyes ; then
+	PKG_CHECK_MODULES(DAEMON, glib-2.0)
+	AC_SUBST(DAEMON_CFLAGS)
+	AC_SUBST(DAEMON_LIBS)
+fi
+AM_CONDITIONAL(BUILD_SERVER, test x$enable_server = xyes)
+
+
+dnl
+dnl Tests
+dnl
+enable_tests="no"
+if test x$enable_server = xyes && test x$enable_libgamin = xyes ; then
+	PKG_CHECK_MODULES(TEST, glib-2.0)
+	AC_SUBST(TEST_LIBS)
+	AC_SUBST(TEST_CFLAGS)
+	enable_tests="yes"
+
+fi
+AM_CONDITIONAL(BUILD_TESTS, test x$enable_tests = xyes)
+
+
+AC_ARG_ENABLE(more-warnings,
+	AC_HELP_STRING([--disable-more-warnings], [Minimum compiler warnings]),
+	[set_more_warnings="${enableval}"], [
+#		if test -d $srcdir/CVS; then
+			warnings_default=yes
+#		else
+#			warnings_default=no
+#		fi
+	])
+
+AC_ARG_ENABLE(debug,
+#	AC_HELP_STRING([--enable-debug], [Enable debugging support]),
+#	[debug=$enableval], [
+#	if test -d $srcdir/CVS; then
+#		debug=yes
+#	else
+#		debug=no
+#	fi
+#	])
+	AC_HELP_STRING([--disable-debug], [Disable debugging support]),
+	[debug=$enableval], [debug=yes])
+
+if test x$debug = xyes ; then
+    AC_DEFINE([GAMIN_DEBUG], [], [Enable debugging support])
+fi
+
+AM_CONDITIONAL(GAMIN_DEBUG, test x$debug = xyes)
+
+AC_ARG_ENABLE(debug_api,
+AC_HELP_STRING([--enable-debug-api], [Enable debugging API]),
+[debug_api="${enableval}"])
+
+if test "$debug_api" = "" -a -d $srcdir/CVS; then
+	echo "Building from CVS, enabling debug api"
+	debug_api=yes
+fi
+
+if test x$debug_api = xyes ; then
+    AC_DEFINE([GAMIN_DEBUG_API], [], [Enable debugging API])
+fi
+
+dnl check what OS we're on
+#AM_CONDITIONAL(HAVE_LINUX, test x$target_os = xlinux-gnu)
+if test x$target_os = xlinux-gnu; then
+	AC_DEFINE([HAVE_LINUX],[],[Whether we are using linux or not])
+fi
+
+AC_ARG_ENABLE(kernel,
+	AC_HELP_STRING([--disable-kernel], [Use polling regardless of what kernel-level systems are available]),
+	[os=${enableval}],[os=${target_os}])
+
+if test x$os = xyes; then
+	os=${target_os}
+elif test x$os = xno; then
+	os="BogusOS"
+elif test x$os != x${target_os}; then
+	AC_MSG_ERROR(bad value ${enableval} for --disable-kernel)
+fi
+
+dnl We use polling no matter what.
+AC_DEFINE(ENABLE_POLLING,1,[Use polling as backend])
+backends="polling"
+
+AC_ARG_ENABLE(inotify,
+	AC_HELP_STRING([--disable-inotify], [Disable the INotify backend]),
+	[inotify="${enableval}"], [inotify=auto])
+
+if test x$inotify = xyes; then
+	inotify=true
+elif test x$inotify = xno; then
+	inotify=false
+fi
+
+if test x$inotify = xtrue -o x$inotify = xauto; then
+	AC_CHECK_HEADERS(sys/inotify.h)
+	if test x"$ac_cv_header_sys_inotify_h" = x"no" -a x"$inotify" = xtrue; then
+		AC_MSG_ERROR([sys/inotify.h requested but not available])
+	fi
+	if test x"$ac_cv_header_sys_inotify_h" = xyes; then
+		AC_DEFINE(ENABLE_INOTIFY,1,[Use inotify as backend])
+		backends="${backends}, inotify"
+		inotify=true
+	else
+		inotify=false
+	fi
+fi
+
+dnl check if inotify backend is enabled
+AM_CONDITIONAL(ENABLE_INOTIFY, test x$inotify = xtrue)
+
+if test x$os = xlinux-gnu; then
+	AC_ARG_ENABLE(dnotify,
+		AC_HELP_STRING([--disable-dnotify], [Disable the DNotify backend]),
+		[dnotify="${enableval}"], [dnotify=true])
+		
+	if test x$dnotify = xyes; then
+		dnotify=true
+	elif test x$dnotify = xno; then
+		dnotify=false
+	elif test x$dnotify != xtrue; then
+		AC_MSG_ERROR(bad value ${enableval} for --disable-dnotify)
+	fi
+fi
+
+if test x$dnotify = xfalse; then
+	if test x$inotify = xtrue; then
+		echo "When using inotify, gamin sometimes needs dnotify as a fallback"
+		echo "so dnotify support will be enabled"
+		dnotify=true
+	fi
+fi
+
+dnl check if dnotify backend is enabled
+AM_CONDITIONAL(ENABLE_DNOTIFY, test x$dnotify = xtrue)
+
+if test x$dnotify = xtrue; then
+	AC_DEFINE(ENABLE_DNOTIFY,1,[Use dnotify as backend])
+	backends="${backends}, dnotify"
+fi
+
+if test x$os != xBogusOS; then
+    	AC_CHECK_FUNC(kevent,[have_kevent=1],)
+	if test x$have_kevent = x1 ; then
+	    AC_ARG_ENABLE(kqueue,
+			AC_HELP_STRING([--disable-kqueue], [Disable the KQueue backend]),
+			[kqueue="${enableval}"], [kqueue=true])
+			
+		if test x$kqueue = xyes; then
+			kqueue=true
+		elif test x$kqueue = xno; then
+			kqueue=false
+		elif test x$kqueue != xtrue; then
+			AC_MSG_ERROR(bad value ${enableval} for --disable-kqueue)
+		fi
+	fi
+fi
+
+dnl check if kqueue backend is enabled
+AM_CONDITIONAL(ENABLE_KQUEUE, test x$kqueue = xtrue)
+
+if test x$kqueue = xtrue; then
+    	AC_CHECK_HEADERS(sys/event.h)
+	AC_DEFINE(ENABLE_KQUEUE,1,[Use kqueue as backend])
+	backends="${backends}, kqueue"
+fi
+
+dnl pthread support for reentrance of the client library.
+AC_ARG_WITH(threads,
+[  --with-threads          add multithread support(on)])
+
+if test "$with_threads" = "no" ; then
+    echo Disabling multithreaded support
+else
+    echo Enabling multithreaded support
+
+    AC_CHECK_HEADER(pthread.h,
+	AC_CHECK_LIB(pthread, pthread_mutexattr_settype,[
+	   THREAD_LIBS="-lpthread"
+	   AC_DEFINE([HAVE_LIBPTHREAD], [], [Define if pthread library is there (-lpthread)])
+	   AC_DEFINE([HAVE_PTHREAD_H], [], [Define if <pthread.h> is there])
+	   WITH_THREADS="1"]))
+fi
+
+dnl Use weak symbols on linux/gcc to avoid imposing libpthreads to apps
+if test x$os = xlinux-gnu -a x$WITH_THREADS = x1 ; then
+    if test "${CC}" = "gcc" ; then
+        echo Use weak symbols !
+        THREAD_LIBS=
+    fi
+fi	
+AC_SUBST(THREAD_LIBS)
+AC_SUBST(WITH_THREADS)
+
+# It may just be gnu but it could also be gnu0.3, etc.
+#   if echo x$os | grep -E -e '^xgnu[0-9]*\.?[0-9]*$' >/dev/null;
+# won't work as m4 eats the []s.
+if case x$os in xgnu*) true;; *) false;; esac; then
+	AC_ARG_ENABLE(kqueue,
+		AC_HELP_STRING([--disable-hurd_mach_notify], [Disable the Hurd Mach Notify backend]),
+		[hurd_mach_notify="${enableval}"], [hurd_mach_notify=true])
+		
+	if test x$hurd_mach_notify = xyes; then
+		hurd_mach_notify=true
+	elif test x$hurd_mach_notify = xno; then
+		hurd_mach_notify=false
+	elif test x$hurd_mach_notify != xtrue; then
+		AC_MSG_ERROR(bad value ${enableval} for --disable-hurd_mach_notify)
+	fi
+fi
+
+dnl check if hurd_mach_notify backend is enabled
+AM_CONDITIONAL(ENABLE_HURD_MACH_NOTIFY, test x$hurd_mach_notify = xtrue)
+
+if test x$hurd_mach_notify = xtrue; then
+        # <hurd/ports.h> requires _GNU_SOURCE.
+	old_CPPFLAGS="$CPPFLAGS"
+	CPPFLAGS="$old_CPPFLAGS -D_GNU_SOURCE"
+	AC_CHECK_HEADERS([hurd/ports.h], ,
+                         [AC_MSG_ERROR([<hurd/ports.h> not found but required to build hurd_mach_notify backend.])])
+	CPPFLAGS="$old_CPPFLAGS"
+
+	AC_CHECK_LIB([ports], [ports_create_port], [:],
+	             [AC_MSG_ERROR([libports not found but required to build hurd_mach_notify backend.])], [-lthreads])
+
+        AC_CHECK_TOOL(MIG, [mig], [AC_MSG_ERROR([mig not found but required to build hurd_mach_notify backend.])])
+	AC_SUBST(MIG)
+
+	AC_DEFINE(ENABLE_HURD_MACH_NOTIFY,1,[Use hurd_mach_notify as backend])
+	backends="${backends}, hurd_mach_notify"
+fi
+
+dnl check for flavours of varargs macros (test from GLib)
+AC_MSG_CHECKING(for ISO C99 varargs macros in C)
+AC_TRY_COMPILE([],[
+int a(int p1, int p2, int p3);
+#define call_a(...) a(1,__VA_ARGS__)
+call_a(2,3);
+],dbus_have_iso_c_varargs=yes,dbus_have_iso_c_varargs=no)
+AC_MSG_RESULT($dbus_have_iso_c_varargs)
+                                                                                
+AC_MSG_CHECKING(for GNUC varargs macros)
+AC_TRY_COMPILE([],[
+int a(int p1, int p2, int p3);
+#define call_a(params...) a(1,params)
+call_a(2,3);
+],dbus_have_gnuc_varargs=yes,dbus_have_gnuc_varargs=no)
+AC_MSG_RESULT($dbus_have_gnuc_varargs)
+                                                                                
+dnl Output varargs tests
+if test x$dbus_have_iso_c_varargs = xyes; then
+    AC_DEFINE(HAVE_ISO_VARARGS,1,[Have ISO C99 varargs macros])
+fi
+if test x$dbus_have_gnuc_varargs = xyes; then
+    AC_DEFINE(HAVE_GNUC_VARARGS,1,[Have GNU-style varargs macros])
+fi
+
+dnl Check for various credentials.
+AC_MSG_CHECKING(for struct cmsgcred)
+AC_TRY_COMPILE([
+#include <sys/types.h>
+#include <sys/socket.h>
+],[
+struct cmsgcred cred;
+
+cred.cmcred_pid = 0;
+],dbus_have_struct_cmsgcred=yes,dbus_have_struct_cmsgcred=no)
+AC_MSG_RESULT($dbus_have_struct_cmsgcred)
+
+if test x$dbus_have_struct_cmsgcred = xyes; then
+    AC_DEFINE(HAVE_CMSGCRED,1,[Have cmsgcred structure])
+fi
+
+#### Abstract sockets
+
+AC_MSG_CHECKING(abstract socket namespace)
+AC_LANG_PUSH(C)
+AC_RUN_IFELSE([AC_LANG_PROGRAM(
+[[
+#include <sys/types.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <errno.h>
+]],
+[[
+  int listen_fd;
+  struct sockaddr_un addr;
+  
+  listen_fd = socket (PF_UNIX, SOCK_STREAM, 0);
+  
+  if (listen_fd < 0)
+    {
+      fprintf (stderr, "socket() failed: %s\n", strerror (errno));
+      exit (1);
+    }
+
+  memset (&addr, '\0', sizeof (addr));
+  addr.sun_family = AF_UNIX;
+  strcpy (addr.sun_path, "X/tmp/dbus-fake-socket-path-used-in-configure-test");
+  addr.sun_path[0] = '\0'; /* this is what makes it abstract */
+  
+  if (bind (listen_fd, (struct sockaddr*) &addr, SUN_LEN (&addr)) < 0)
+    {
+       fprintf (stderr, "Abstract socket namespace bind() failed: %s\n", 
+                strerror (errno));
+       exit (1);
+    }
+  else 
+    exit (0);
+]])],
+              [have_abstract_sockets=yes],
+              [have_abstract_sockets=no])
+AC_LANG_POP(C)
+AC_MSG_RESULT($have_abstract_sockets)
+
+if test x$enable_abstract_sockets = xyes; then
+    if test x$have_abstract_sockets = xno; then
+	AC_MSG_ERROR([Abstract sockets explicitly required, and support not detected.])
+    fi
+fi
+
+if test x$enable_abstract_sockets = xno; then
+   have_abstract_sockets=no;
+fi
+
+if test x$have_abstract_sockets = xyes ; then
+   AC_DEFINE_UNQUOTED(HAVE_ABSTRACT_SOCKETS, $abstract_sockets, [Have abstract socket namespace])
+fi
+
+dnl
+dnl check for python
+dnl
+
+AC_ARG_WITH(python,
+[  --with-python[[=DIR]]     build Python bindings if found])
+
+PYTHON_VERSION=
+PYTHON_INCLUDES=
+PYTHON_SITE_PACKAGES=
+PYTHON_TESTS=
+pythondir=
+if test "$with_python" != "no" ; then
+    if test -x "$with_python/bin/python"
+    then
+        echo Found python in $with_python/bin/python
+        PYTHON="$with_python/bin/python"
+    else
+	if test -x "$with_python"
+	then
+	    echo Found python in $with_python
+	    PYTHON="$with_python"
+	else
+	    if test -x "$PYTHON"
+	    then
+	        echo Found python in environment PYTHON=$PYTHON
+		with_python=`$PYTHON -c "import sys; print sys.exec_prefix"`
+	    else
+		AC_PATH_PROG(PYTHON, python python2.6 python2.5 python2.4 python2.3 python2.2 python2.1 python2.0 python1.6 python1.5)
+	    fi
+	fi
+    fi
+    if test "$PYTHON" != ""
+    then
+        PYTHON_VERSION=`$PYTHON -c "import sys; print sys.version[[0:3]]"`
+	echo Found Python version $PYTHON_VERSION
+    fi
+    if test "$PYTHON_VERSION" != ""
+    then
+	if test -r $with_python/include/python$PYTHON_VERSION/Python.h -a \
+	   -d $with_python/lib/python$PYTHON_VERSION/site-packages
+	then
+	    PYTHON_INCLUDES=$with_python/include/python$PYTHON_VERSION
+	    PYTHON_SITE_PACKAGES=$libdir/python$PYTHON_VERSION/site-packages
+	else
+	    if test -r $prefix/include/python$PYTHON_VERSION/Python.h
+	    then
+	        PYTHON_INCLUDES=$prefix/include/python$PYTHON_VERSION
+	        PYTHON_SITE_PACKAGES=$libdir/python$PYTHON_VERSION/site-packages
+	    else
+		if test -r /usr/include/python$PYTHON_VERSION/Python.h
+		then
+		    PYTHON_INCLUDES=/usr/include/python$PYTHON_VERSION
+	            PYTHON_SITE_PACKAGES=$libdir/python$PYTHON_VERSION/site-packages
+		else
+		    echo could not find python$PYTHON_VERSION/Python.h
+		fi
+	    fi
+	    if test ! -d "$PYTHON_SITE_PACKAGES"
+	    then
+		    PYTHON_SITE_PACKAGES=`$PYTHON -c "from distutils import sysconfig; print sysconfig.get_python_lib()"`
+	    fi
+	fi
+    fi
+    if test "$with_python" != ""
+    then
+        pythondir='$(PYTHON_SITE_PACKAGES)'
+    else
+        pythondir='$(libdir)/python$(PYTHON_VERSION)/site-packages'
+    fi
+else
+    PYTHON=
+fi
+if test "$PYTHON_INCLUDES" != ""
+then
+    enable_python="$enable_libgamin"
+else
+    enable_python="no"
+fi
+AM_CONDITIONAL(WITH_PYTHON, test "$enable_python" = "yes")
+AC_SUBST(pythondir)
+AC_SUBST(PYTHON_VERSION)
+AC_SUBST(PYTHON_INCLUDES)
+AC_SUBST(PYTHON_SITE_PACKAGES)
+
+dnl After all config-related tweaking of CFLAGS, set it to its "build" value
+
+AC_MSG_CHECKING(for more compiler warnings)
+if test "$GCC" = "yes" -a "$set_more_warnings" != "no"; then
+	AC_MSG_RESULT(yes)
+	warning_cflags="\
+ -Wall\
+ -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes\
+ -Wnested-externs\
+ -Wsign-compare"
+
+	SAVE_CFLAGS="$CFLAGS"
+	for option in -Wno-sign-compare; do
+		CFLAGS="$option"
+		AC_MSG_CHECKING([whether gcc understands $option])
+		AC_TRY_COMPILE([], [],
+			has_option=yes,
+			has_option=no,)
+		if test "$has_option" != "no"; then
+			warning_cflags="$warning_cflags $option"
+		fi
+		AC_MSG_RESULT($has_option)
+		unset has_option
+	done
+	CFLAGS="$SAVE_CFLAGS"
+	unset option
+else
+	AC_MSG_RESULT(no)
+fi
+
+if test "$GCC" = "yes"; then
+	if test "$debug" = "yes"; then
+		debug_cflags="-g"
+	else
+		# autotools defaults to "-O2 -g" for cflags, but we don't
+		# want -g in non-debug builds
+		if test -z "$ENV_CFLAGS"; then
+			CFLAGS="-O2"
+		fi
+	fi
+fi
+
+AM_CFLAGS="$warning_cflags $debug_cflags"
+AC_SUBST(AM_CFLAGS)
+
+dnl ==========================================================================
+
+AC_OUTPUT([
+Makefile
+lib/Makefile
+libgamin/Makefile
+server/Makefile
+tests/Makefile
+python/Makefile
+python/tests/Makefile
+doc/Makefile
+gamin.pc
+gamin.spec
+])
+
+#docs/Makefile
+#docs/guide/Makefile
+
+echo "
+gamin-$VERSION:
+                                                                                
+        prefix:                   ${prefix}
+        source code location:     ${srcdir}
+        compiler:                 ${CC}
+        compiler flags:           ${AM_CFLAGS} ${CFLAGS}
+
+	build gam_server:         ${enable_server}
+	build libgamin/libfam:    ${enable_libgamin}
+	build python bindings:    ${enable_python}
+	build tests:              ${enable_tests}
+                                                                                
+	backends:                 ${backends}
+	build documentation:      ${build_docs}
+	debug support:            ${debug}
+"

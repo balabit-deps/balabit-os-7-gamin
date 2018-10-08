@@ -1,0 +1,37 @@
+    Debugging support in gamin:
+
+Both the client and server side, if compiled with debug support
+accept an environment variable GAM_DEBUG which is set will make
+them report debugging informations to stdout.
+
+Usually for debugging you also want to use a dedicated server
+process so setting the GAM_CLIENT_ID environment allows to ensure this.
+Usually one also want to keep control over the server lifetime
+and not have it exit automatically after 30 seconds without connection,
+there is a command line flag --notimeout to gam_server for this.
+
+a typical example of a debugging session using 2 shells would be
+
+shell1: export GAM_DEBUG=
+shell1: gam_server --notimeout test
+
+running the server in debug mode using the ID "test"
+
+shell2: export GAM_DEBUG=
+shell2: export GAM_CLIENT_ID=test
+shell2: gamin_client
+
+this will run a verbose session. It is perfectly possible to also
+run the client under a debugger, for the server it works too except
+the dnotify kernel interface uses a signal SIG33 which is trapped by
+gdb. To avoid this use the handle gdb instruction:
+
+(gdb) handle SIG33 nostop
+Signal        Stop      Print   Pass to program Description
+SIG33         No        Yes     Yes             Real-time event 33
+(gdb) 
+
+even better add it to your $HOME/.gdbinit
+
+Daniel Veillard
+$id$

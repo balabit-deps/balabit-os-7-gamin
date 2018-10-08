@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /><style type="text/css">
+TD {font-family: Verdana,Arial,Helvetica}
+BODY {font-family: Verdana,Arial,Helvetica; margin-top: 2em; margin-left: 0em; margin-right: 0em}
+H1 {font-family: Verdana,Arial,Helvetica}
+H2 {font-family: Verdana,Arial,Helvetica}
+H3 {font-family: Verdana,Arial,Helvetica}
+A:link, A:visited, A:active { text-decoration: underline }
+</style><title>Python bindings</title></head><body bgcolor="#8b7765" text="#000000" link="#a06060" vlink="#000000"><table border="0" width="100%" cellpadding="5" cellspacing="0" align="center"><tr><td width="120"></td><td><table border="0" width="90%" cellpadding="2" cellspacing="0" align="center" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3" bgcolor="#fffacd"><tr><td align="center"><h1>Gamin the File Alteration Monitor</h1><h2>Python bindings</h2></td></tr></table></td></tr></table></td></tr></table><table border="0" cellpadding="4" cellspacing="0" width="100%" align="center"><tr><td bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="2" width="100%"><tr><td valign="top" width="200" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Main Menu</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="using.html">Using gamin</a></li><li><a href="config.html">Configuration</a></li><li><a href="news.html">News</a></li><li><a href="downloads.html">Downloads</a></li><li><a href="python.html">Python bindings</a></li><li><a href="devel.html">Developers informations</a></li><li><a href="contacts.html">Contacts</a></li><li><a href="FAQ.html">FAQ</a></li><li><a href="debug.html">Debugging Gamin</a></li><li><a href="security.html">Security</a></li><li><a href="internals.html">Internals</a></li><li><a href="differences.html">Differences from FAM</a></li><li><a href="ChangeLog.html">ChangeLog</a></li></ul></td></tr></table><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Related links</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="http://mail.gnome.org/archives/gamin-list/">Mail archive</a></li><li><a href="http://oss.sgi.com/projects/fam/">FAM project</a></li><li><a href="sources/">sources</a></li><li><a href="http://bugzilla.gnome.org/buglist.cgi?product=gamin&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=NEEDINFO&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;form_name=query">GNOME Bugzilla</a></li><li><a href="https://bugzilla.redhat.com/bugzilla/buglist.cgi?product=Fedora+Core&amp;product=Red+Hat+Enterprise+Linux&amp;component=fam&amp;component=gamin&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=MODIFIED&amp;short_desc_type=allwordssubstr&amp;short_desc=&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;Search=Search">Red Hat Bugzilla</a></li></ul></td></tr></table></td></tr></table></td><td valign="top" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%"><tr><td><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td bgcolor="#fffacd"><p>Starting with release 0.0.21, gamin comes with Python bindings. Use "<span style="font-family: monospace;">import gamin</span>"
+to load the module. It exports the main class "<span style="font-family: monospace;">WatchMonitor</span>"
+which handle one connection to the gam_server. Once an instance of the
+class has been created you can use the watch_directory and watch_file
+methods to register objects to monitors, and provide the callback to be
+called when events are generated. Like the FAM API, the python binding
+API is passive, i.e. one need  to  monitor the file
+descriptor provided with the <span style="font-family: monospace;">get_fd()</span>
+method to detect events, and call <span style="font-family: monospace;">handle_one_event()</span>
+(blocking) or <span style="font-family: monospace;">handle_events()</span>
+(non-blocking) to process incoming events and get the callbacks
+appropriately. You can also use the <span style="font-family: monospace;">event_pending()</span>
+method to detect if <span style="font-family: monospace;">handle_one_event()</span>
+would block or not.<br />
+Since a short example is worth a thousand words, here is a small
+session from the python shell:</p><pre>
+&gt;&gt;&gt; import gamin
+&gt;&gt;&gt;
+&gt;&gt;&gt; def callback(path, event):
+...     print "Got callback: %s, %s" % (path, event)
+...
+&gt;&gt;&gt; mon = gamin.WatchMonitor()
+&gt;&gt;&gt; mon.watch_directory(".", callback)
+&lt;gamin.WatchObject instance at 0xb7f7b56c&gt;
+&gt;&gt;&gt; mon.event_pending()
+1
+&gt;&gt;&gt; mon.handle_one_event()
+Got callback: /u/veillard/temp, 8
+1
+&gt;&gt;&gt; mon.handle_events()
+Got callback: bar1, 8
+Got callback: foo1, 8
+Got callback: /u/veillard/temp, 9
+3
+&gt;&gt;&gt; mon.stop_watch(".")
+&gt;&gt;&gt; del mon
+</pre><p>The corresponding standalone code follows:</p><pre>#!/usr/bin/env python
+
+import gamin
+import time
+
+def callback(path, event):
+    print "Got callback: %s, %s" % (path, event)
+
+mon = gamin.WatchMonitor()
+mon.watch_directory(".", callback)
+time.sleep(1)
+ret = mon.event_pending()
+if ret &gt; 0:
+    ret = mon.handle_one_event()
+    ret = mon.handle_events()
+mon.stop_watch(".")
+del mon
+</pre><p>Note the addition of the sleep timeout, it is needed because due to the round trip between the client and the gam_server, events may not be immediately available after the monitor creation to the client.</p><p><a href="contacts.html">Daniel Veillard</a></p></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></body></html>

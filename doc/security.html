@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /><style type="text/css">
+TD {font-family: Verdana,Arial,Helvetica}
+BODY {font-family: Verdana,Arial,Helvetica; margin-top: 2em; margin-left: 0em; margin-right: 0em}
+H1 {font-family: Verdana,Arial,Helvetica}
+H2 {font-family: Verdana,Arial,Helvetica}
+H3 {font-family: Verdana,Arial,Helvetica}
+A:link, A:visited, A:active { text-decoration: underline }
+</style><title>Security</title></head><body bgcolor="#8b7765" text="#000000" link="#a06060" vlink="#000000"><table border="0" width="100%" cellpadding="5" cellspacing="0" align="center"><tr><td width="120"></td><td><table border="0" width="90%" cellpadding="2" cellspacing="0" align="center" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3" bgcolor="#fffacd"><tr><td align="center"><h1>Gamin the File Alteration Monitor</h1><h2>Security</h2></td></tr></table></td></tr></table></td></tr></table><table border="0" cellpadding="4" cellspacing="0" width="100%" align="center"><tr><td bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="2" width="100%"><tr><td valign="top" width="200" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Main Menu</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="using.html">Using gamin</a></li><li><a href="config.html">Configuration</a></li><li><a href="news.html">News</a></li><li><a href="downloads.html">Downloads</a></li><li><a href="python.html">Python bindings</a></li><li><a href="devel.html">Developers informations</a></li><li><a href="contacts.html">Contacts</a></li><li><a href="FAQ.html">FAQ</a></li><li><a href="debug.html">Debugging Gamin</a></li><li><a href="security.html">Security</a></li><li><a href="internals.html">Internals</a></li><li><a href="differences.html">Differences from FAM</a></li><li><a href="ChangeLog.html">ChangeLog</a></li></ul></td></tr></table><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Related links</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="http://mail.gnome.org/archives/gamin-list/">Mail archive</a></li><li><a href="http://oss.sgi.com/projects/fam/">FAM project</a></li><li><a href="sources/">sources</a></li><li><a href="http://bugzilla.gnome.org/buglist.cgi?product=gamin&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=NEEDINFO&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;form_name=query">GNOME Bugzilla</a></li><li><a href="https://bugzilla.redhat.com/bugzilla/buglist.cgi?product=Fedora+Core&amp;product=Red+Hat+Enterprise+Linux&amp;component=fam&amp;component=gamin&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=MODIFIED&amp;short_desc_type=allwordssubstr&amp;short_desc=&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;Search=Search">Red Hat Bugzilla</a></li></ul></td></tr></table></td></tr></table></td><td valign="top" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%"><tr><td><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td bgcolor="#fffacd"><p>While gamin still use a server to provide the service (ideally if the
+kernel had a proper interface a library only implementation should be doable
+and possibly better), it tries to avoid security hazard associated to
+contacting an external server process:</p><ul><li>the server runs under the same privilege level as the client, by
+    running under the uid, no root or superuser access is involved, this is
+    checked by both side using kernel support for the checking</li>
+  <li>when possible (e.g. on Linux) the socket used to communicate is not
+    mapped at the filesystem level to avoid risks related to opening a real
+    file, if the kernel doesn't allow this a per user directory holding the
+    socket is used and appropriate rights are checked.</li>
+  <li>to limit DoS attacks done by continuously modifying a monitored
+    resource, the daemon will switch back monitoring of very busy resources
+    to polling with generation of events only once per second.</li>
+</ul><p>Here is the process used to acquire and create the sockets:</p><h3>If there is abstract socket support:</h3><p>Use the filename "\0/tmp/fam-$USER-$GAM_CLIENT_ID". They are not mapped on
+the filesystem, no attack is possible that way. The client and the server
+checks on the first '\0' byte received from the socket that the other side is
+running under the same UID.</p><h3>If there is no abstract socket support:</h3><p>On the server side:</p><pre> start:
+  try to create /tmp/fam-$USER using mkdir('/tmp/fam-$USER', 007)
+  if error:
+      make a stat() on it
+      if doesn't exist:
+          return failure to create
+      if user is not getuid() or mode is not 007 or type is not dir:
+          try to unlink()
+          if error:
+              exit with error.
+          if success:
+              goto start:
+                                                                                
+  do the socket()/bind() on /tmp/fam-$USER/fam-$GAM_CLIENT_ID</pre><p>On the client side:</p><pre>  make a stat on /tmp/fam-$USER
+  if doesn't exist:
+      return failure to create should start the server
+  if user is not getuid() or mode is not 007 or type is not dir:
+      try to unlink()
+      if error:
+          exit with error.
+      if success:
+          return failure should start the server
+  make a stat on /tmp/fam-$USER/fam-$GAM_CLIENT_ID
+  if doesn't exist:
+      return failure to create should start the server
+  if user is not getuid() or type is not socket:
+      try to unlink()
+      if error:
+          exit with error.
+      if success:
+          return failure should start the server
+                                                                                
+  do the socket()/connect() on /tmp/fam-$USER/fam-$GAM_CLIENT_ID</pre><p>The client and the server checks on the first '\0' byte received that the
+other side is of the same UID.</p><p><a href="contacts.html">Daniel Veillard</a></p></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></body></html>

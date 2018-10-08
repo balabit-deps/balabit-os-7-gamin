@@ -1,0 +1,8 @@
+mkdir /tmp/test_gamin
+connected to test
+pending 0
+mondir /tmp/test_gamin 0
+1: /tmp/test_gamin Exists: NULL
+1: /tmp/test_gamin EndExist: NULL
+disconnected
+rmdir /tmp/test_gamin

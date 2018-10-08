@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<api name='gamin'>
+  <files>
+    <file name='fam'>
+     <exports symbol='FAMCONNECTION_GETFD' type='macro'/>
+     <exports symbol='FAMREQUEST_GETREQNUM' type='macro'/>
+     <exports symbol='FAMChanged' type='enum'/>
+     <exports symbol='FAMAcknowledge' type='enum'/>
+     <exports symbol='FAMCreated' type='enum'/>
+     <exports symbol='FAMStartExecuting' type='enum'/>
+     <exports symbol='FAMDeleted' type='enum'/>
+     <exports symbol='FAMEndExist' type='enum'/>
+     <exports symbol='FAMStopExecuting' type='enum'/>
+     <exports symbol='FAMExists' type='enum'/>
+     <exports symbol='FAMMoved' type='enum'/>
+     <exports symbol='FAMCodes' type='typedef'/>
+     <exports symbol='FAMEvent' type='typedef'/>
+     <exports symbol='FAMConnection' type='typedef'/>
+     <exports symbol='FAMConnectionPtr' type='typedef'/>
+     <exports symbol='FAMRequestPtr' type='typedef'/>
+     <exports symbol='FAMRequest' type='typedef'/>
+     <exports symbol='FAMConnection' type='struct'/>
+     <exports symbol='FAMEvent' type='struct'/>
+     <exports symbol='FAMRequest' type='struct'/>
+     <exports symbol='FAMErrno' type='variable'/>
+     <exports symbol='FamErrlist' type='variable'/>
+     <exports symbol='FAMCancelMonitor' type='function'/>
+     <exports symbol='FAMMonitorCollection' type='function'/>
+     <exports symbol='FAMSuspendMonitor' type='function'/>
+     <exports symbol='FAMResumeMonitor' type='function'/>
+     <exports symbol='FAMOpen2' type='function'/>
+     <exports symbol='FAMPending' type='function'/>
+     <exports symbol='FAMMonitorDirectory' type='function'/>
+     <exports symbol='FAMNextEvent' type='function'/>
+     <exports symbol='FAMMonitorFile' type='function'/>
+     <exports symbol='FAMOpen' type='function'/>
+     <exports symbol='FAMMonitorDirectory2' type='function'/>
+     <exports symbol='FAMClose' type='function'/>
+     <exports symbol='FAMMonitorFile2' type='function'/>
+    </file>
+    <file name='gam_data'>
+     <exports symbol='GAMReqData' type='typedef'/>
+     <exports symbol='GAMReqDataPtr' type='typedef'/>
+     <exports symbol='GAMData' type='typedef'/>
+     <exports symbol='GAMDataPtr' type='typedef'/>
+     <exports symbol='GAMReqData' type='struct'/>
+     <exports symbol='gamin_data_get_request' type='function'/>
+     <exports symbol='gamin_data_need_auth' type='function'/>
+     <exports symbol='gamin_data_del_req' type='function'/>
+     <exports symbol='gamin_data_done_auth' type='function'/>
+     <exports symbol='gamin_data_read_event' type='function'/>
+     <exports symbol='gamin_data_free' type='function'/>
+     <exports symbol='gamin_data_event_ready' type='function'/>
+     <exports symbol='gamin_data_new' type='function'/>
+     <exports symbol='gamin_data_get_data' type='function'/>
+     <exports symbol='gamin_data_conn_data' type='function'/>
+     <exports symbol='gamin_data_reset' type='function'/>
+     <exports symbol='gamin_data_get_reqnum' type='function'/>
+    </file>
+    <file name='gam_fork'>
+     <exports symbol='gamin_fork_server' type='function'/>
+    </file>
+    <file name='gam_protocol'>
+     <exports symbol='GAM_PROTO_VERSION' type='macro'/>
+     <exports symbol='GAM_PACKET_HEADER_LEN' type='macro'/>
+     <exports symbol='MAXPATHLEN' type='macro'/>
+     <exports symbol='GAM_REQ_DIR' type='enum'/>
+     <exports symbol='GAM_REQ_FILE' type='enum'/>
+     <exports symbol='GAM_REQ_CANCEL' type='enum'/>
+     <exports symbol='GAMReqType' type='typedef'/>
+     <exports symbol='GAMPacket' type='typedef'/>
+     <exports symbol='GAMPacketPtr' type='typedef'/>
+     <exports symbol='GAMPacket' type='struct'/>
+    </file>
+  </files>
+  <symbols>
+    <macro name='FAMCONNECTION_GETFD' file='fam'>
+      <info>The only field available from the connection is the file descriptor and it should be accessed though the macro</info>
+    </macro>
+    <macro name='FAMREQUEST_GETREQNUM' file='fam'>
+      <info>The only field available from the request is the request number and it should be accessed though the macro</info>
+    </macro>
+    <macro name='GAM_PACKET_HEADER_LEN' file='gam_protocol'>
+      <info>convenience macro to provide the length of the packet header.</info>
+    </macro>
+    <macro name='GAM_PROTO_VERSION' file='gam_protocol'>
+      <info>versionning at the protocol level</info>
+    </macro>
+    <macro name='MAXPATHLEN' file='gam_protocol'>
+      <info>Needed to check length of paths</info>
+    </macro>
+    <enum name='FAMAcknowledge' file='fam' value='7' type='FAMCodes'/>
+    <enum name='FAMChanged' file='fam' value='1' type='FAMCodes'/>
+    <enum name='FAMCreated' file='fam' value='5' type='FAMCodes'/>
+    <enum name='FAMDeleted' file='fam' value='2' type='FAMCodes'/>
+    <enum name='FAMEndExist' file='fam' value='9' type='FAMCodes'/>
+    <enum name='FAMExists' file='fam' value='8' type='FAMCodes'/>
+    <enum name='FAMMoved' file='fam' value='6' type='FAMCodes'/>
+    <enum name='FAMStartExecuting' file='fam' value='3' type='FAMCodes'/>
+    <enum name='FAMStopExecuting' file='fam' value='4' type='FAMCodes'/>
+    <enum name='GAM_REQ_CANCEL' file='gam_protocol' value='3' type='GAMReqType'/>
+    <enum name='GAM_REQ_DIR' file='gam_protocol' value='2' type='GAMReqType'/>
+    <enum name='GAM_REQ_FILE' file='gam_protocol' value='1' type='GAMReqType'/>
+    <typedef name='FAMCodes' file='fam' type='enum'/>
+    <struct name='FAMConnection' file='fam' type='struct FAMConnection'>
+      <field name='fd' type='int' info=''/>
+      <field name='client' type='void *' info=''/>
+    </struct>
+    <typedef name='FAMConnectionPtr' file='fam' type='FAMConnection *'/>
+    <struct name='FAMEvent' file='fam' type='struct FAMEvent'/>
+    <struct name='FAMRequest' file='fam' type='struct FAMRequest'>
+      <field name='reqnum' type='int' info=''/>
+    </struct>
+    <typedef name='FAMRequestPtr' file='fam' type='FAMRequest *'/>
+    <struct name='GAMData' file='gam_data' type='struct GAMData'/>
+    <typedef name='GAMDataPtr' file='gam_data' type='GAMData *'/>
+    <struct name='GAMPacket' file='gam_protocol' type='struct GAMPacket'>
+      <field name='len' type='unsigned short' info=' the total lenght of the request'/>
+      <field name='version' type='unsigned short' info=' version of the protocol'/>
+      <field name='seq' type='unsigned short' info=' the sequence number'/>
+      <field name='type' type='unsigned short' info=' type of request GAMReqType | GAMReqOpts'/>
+      <field name='pathlen' type='unsigned short' info=' the length of the path or filename payload'/>
+      <field name='path' type='charpath[MAXPATHLEN]' info=' the path to the file'/>
+    </struct>
+    <typedef name='GAMPacketPtr' file='gam_protocol' type='GAMPacket *'/>
+    <struct name='GAMReqData' file='gam_data' type='struct GAMReqData'>
+      <field name='reqno' type='int' info=' the request number'/>
+      <field name='state' type='int' info=' the request state'/>
+      <field name='type' type='int' info=' the type of events'/>
+      <field name='filename' type='char *' info=' the filename needed for restarts'/>
+      <field name='userData' type='void *' info=' the user data if any'/>
+    </struct>
+    <typedef name='GAMReqDataPtr' file='gam_data' type='GAMReqData *'/>
+    <typedef name='GAMReqType' file='gam_protocol' type='enum'/>
+    <variable name='FAMErrno' file='fam' type='int'/>
+    <variable name='FamErrlist' file='fam' type='const char *FamErrlist[]'/>
+    <function name='FAMCancelMonitor' file='fam'>
+      <info>This function is used to permanently stop a monitoring request.</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='fr' type='FAMRequest *' info='pointer to a request structure.'/>
+    </function>
+    <function name='FAMClose' file='fam'>
+      <info>This function closes the connection to the FAM server.</info>
+      <return type='int' info='-1 in case of error, 0 otherwise'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+    </function>
+    <function name='FAMMonitorCollection' file='fam'>
+      <info>Register a extended monitoring request for a given directory. NOT SUPPORTED</info>
+      <return type='int' info='-1'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='filename' type='const char *' info='the file filename, it must not be relative.'/>
+      <arg name='fr' type='FAMRequest *' info='pointer to the request structure.'/>
+      <arg name='userData' type='void *' info='user data associated to this request'/>
+      <arg name='depth' type='int' info='supposedly a limit in the recursion depth'/>
+      <arg name='mask' type='const char *' info='unknown !'/>
+    </function>
+    <function name='FAMMonitorDirectory' file='fam'>
+      <info>Register a monitoring request for a given directory.</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='filename' type='const char *' info='the directory filename, it must not be relative.'/>
+      <arg name='fr' type='FAMRequest *' info='pointer to the request structure.'/>
+      <arg name='userData' type='void *' info='user data associated to this request'/>
+    </function>
+    <function name='FAMMonitorDirectory2' file='fam'>
+      <info>Register a monitoring request for a given directory.</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='filename' type='const char *' info='the directory filename, it must not be relative.'/>
+      <arg name='fr' type='FAMRequest *' info='pointer to the request structure.'/>
+    </function>
+    <function name='FAMMonitorFile' file='fam'>
+      <info>Register a monitoring request for a given file.</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='filename' type='const char *' info='the file filename, it must not be relative.'/>
+      <arg name='fr' type='FAMRequest *' info='pointer to the request structure.'/>
+      <arg name='userData' type='void *' info='user data associated to this request'/>
+    </function>
+    <function name='FAMMonitorFile2' file='fam'>
+      <info>Register a monitoring request for a given file.</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='filename' type='const char *' info='the file filename, it must not be relative.'/>
+      <arg name='fr' type='FAMRequest *' info='pointer to the request structure.'/>
+    </function>
+    <function name='FAMNextEvent' file='fam'>
+      <info>Read the next event, possibly blocking on input.</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='fe' type='FAMEvent *' info='pointer to an event structure.'/>
+    </function>
+    <function name='FAMOpen' file='fam'>
+      <info>This function tries to open a connection to the FAM server.</info>
+      <return type='int' info='-1 in case of error, 0 otherwise'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to an uninitialized connection structure'/>
+    </function>
+    <function name='FAMOpen2' file='fam'>
+      <info>This function tries to open a connection to the FAM server. The fam server interface is available though a socket whose id is available though an environment variable GAM_CLIENT_ID</info>
+      <return type='int' info='-1 in case of error, 0 otherwise'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to an uninitialized connection structure'/>
+      <arg name='appName' type='const char *' info='the application name'/>
+    </function>
+    <function name='FAMPending' file='fam'>
+      <info>Check for event waiting for processing.</info>
+      <return type='int' info='the number of events waiting for processing or -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+    </function>
+    <function name='FAMResumeMonitor' file='fam'>
+      <info>Unsupported call from the FAM API</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='fr' type='const FAMRequest *' info='pointer to a request structure.'/>
+    </function>
+    <function name='FAMSuspendMonitor' file='fam'>
+      <info>Unsupported call from the FAM API</info>
+      <return type='int' info='0 in case of success and -1 in case of error.'/>
+      <arg name='fc' type='FAMConnection *' info='pointer to a connection structure.'/>
+      <arg name='fr' type='const FAMRequest *' info='pointer to a request structure.'/>
+    </function>
+    <function name='gamin_data_conn_data' file='gam_data'>
+      <info>Received some incoming data, check if there is complete incoming event(s) and process it (them), otherwise make some sanity check and keep the incomplete event in the structure, waiting for more.</info>
+      <return type='int' info='0 in case of success and -1 in case of error'/>
+      <arg name='conn' type='GAMDataPtr' info='connection data structure.'/>
+      <arg name='len' type='int' info='the event len'/>
+    </function>
+    <function name='gamin_data_del_req' file='gam_data'>
+      <info>Remove a request from the connection</info>
+      <return type='int' info='-1 in case of error, and 0 in case of success'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+      <arg name='reqno' type='int' info='the request number'/>
+    </function>
+    <function name='gamin_data_done_auth' file='gam_data'>
+      <info>The current connection did authentication sucessfully</info>
+      <return type='int' info='0 in case success, -1 in case of failure'/>
+      <arg name='conn' type='GAMDataPtr' info='connection data structure.'/>
+    </function>
+    <function name='gamin_data_event_ready' file='gam_data'>
+      <info>Is there a full event ready for processing</info>
+      <return type='int' info='1 if true, 0 if false and -1 in case of error'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+    </function>
+    <function name='gamin_data_free' file='gam_data'>
+      <info>Free a connection data structure</info>
+      <return type='void'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+    </function>
+    <function name='gamin_data_get_data' file='gam_data'>
+      <info>Get the address and length of the data store for the connection This is called after authentication sucessed so that is reset too</info>
+      <return type='int' info='0 in case of success and -1 in case of failure'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+      <arg name='data' type='char **' info='address to store data'/>
+      <arg name='size' type='int *' info='amount of storage available'/>
+    </function>
+    <function name='gamin_data_get_reqnum' file='gam_data'>
+      <info>Get a new request for a connection</info>
+      <return type='int' info='the new number or -1 in case of error'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+      <arg name='filename' type='const char *' info='the filename associated to the request'/>
+      <arg name='type' type='int' info='the request type'/>
+      <arg name='userData' type='void *' info='user data associated to the request'/>
+    </function>
+    <function name='gamin_data_get_request' file='gam_data'>
+      <info>Get a new request for a connection, where the request number is provided by the user.</info>
+      <return type='int' info='the new number or -1 in case of error'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+      <arg name='filename' type='const char *' info='the filename associated to the request'/>
+      <arg name='type' type='int' info='the request type'/>
+      <arg name='userData' type='void *' info='user data associated to the request'/>
+      <arg name='reqno' type='int' info='the request number provided by the user'/>
+    </function>
+    <function name='gamin_data_need_auth' file='gam_data'>
+      <info>Is the current connection needing authentication</info>
+      <return type='int' info='1 if true, 0 if not needed and -1 in case of error'/>
+      <arg name='conn' type='GAMDataPtr' info='connection data structure.'/>
+    </function>
+    <function name='gamin_data_new' file='gam_data'>
+      <info>Allocates a new connection data structure</info>
+      <return type='GAMDataPtr' info='the new structure or NULL in case of error.'/>
+    </function>
+    <function name='gamin_data_read_event' file='gam_data'>
+      <info>Fills the event structure with the available data</info>
+      <return type='int' info='0 if the event is available or -1 in case of error'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+      <arg name='event' type='FAMEvent *' info='pointer to the event structure to complete'/>
+    </function>
+    <function name='gamin_data_reset' file='gam_data'>
+      <info>Reset the state of the data when there is a reconnection.</info>
+      <return type='int' info='the number of pending requests or -1 in case of error.'/>
+      <arg name='conn' type='GAMDataPtr' info='a connection data structure'/>
+      <arg name='requests' type='GAMReqDataPtr **' info='return value for the array of requests pending'/>
+    </function>
+    <function name='gamin_fork_server' file='gam_fork'>
+      <info>Forks and try to launch the server processing the requests for libgamin under the current process id and using the given client ID</info>
+      <return type='int' info='0 in case of success or -1 in case of detected error.'/>
+      <arg name='fam_client_id' type='const char *' info='the client ID string to use'/>
+    </function>
+  </symbols>
+</api>

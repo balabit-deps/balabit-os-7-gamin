@@ -1,0 +1,16 @@
+rpm -U gamin... gamin-devel-...
+will replace fam and fam-devel with the new code.
+It's good enough for gnome-vfs and nautilus, but some of the entry points
+of the FAM library do not work exactly the same way or are missing, plus
+the documentation is inexistent, so there is some work left to do but
+it can be tested right now.
+The server are autostarted by the library (gam_server) and auto-exits
+once there isn't any client connected for a while, so contrary to fam
+it is not a daemon anymore. It works under the uid of the user, using
+a socked not accessible from the filesystem. The socket name can be
+modified by setting the FAM_CLIENT_ID environment variable to a
+unique string. There is another environment variable GAM_DEBUG allowing
+to debug what's going on the server and the client.
+The server can also be launched manually
+  gam_server [--notimeout] [FAM_CLIENT_ID]
+

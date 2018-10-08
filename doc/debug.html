@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" /><style type="text/css">
+TD {font-family: Verdana,Arial,Helvetica}
+BODY {font-family: Verdana,Arial,Helvetica; margin-top: 2em; margin-left: 0em; margin-right: 0em}
+H1 {font-family: Verdana,Arial,Helvetica}
+H2 {font-family: Verdana,Arial,Helvetica}
+H3 {font-family: Verdana,Arial,Helvetica}
+A:link, A:visited, A:active { text-decoration: underline }
+</style><title>Debugging Gamin</title></head><body bgcolor="#8b7765" text="#000000" link="#a06060" vlink="#000000"><table border="0" width="100%" cellpadding="5" cellspacing="0" align="center"><tr><td width="120"></td><td><table border="0" width="90%" cellpadding="2" cellspacing="0" align="center" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3" bgcolor="#fffacd"><tr><td align="center"><h1>Gamin the File Alteration Monitor</h1><h2>Debugging Gamin</h2></td></tr></table></td></tr></table></td></tr></table><table border="0" cellpadding="4" cellspacing="0" width="100%" align="center"><tr><td bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="2" width="100%"><tr><td valign="top" width="200" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Main Menu</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="using.html">Using gamin</a></li><li><a href="config.html">Configuration</a></li><li><a href="news.html">News</a></li><li><a href="downloads.html">Downloads</a></li><li><a href="python.html">Python bindings</a></li><li><a href="devel.html">Developers informations</a></li><li><a href="contacts.html">Contacts</a></li><li><a href="FAQ.html">FAQ</a></li><li><a href="debug.html">Debugging Gamin</a></li><li><a href="security.html">Security</a></li><li><a href="internals.html">Internals</a></li><li><a href="differences.html">Differences from FAM</a></li><li><a href="ChangeLog.html">ChangeLog</a></li></ul></td></tr></table><table width="100%" border="0" cellspacing="1" cellpadding="3"><tr><td colspan="1" bgcolor="#eecfa1" align="center"><center><b>Related links</b></center></td></tr><tr><td bgcolor="#fffacd"><ul><li><a href="http://mail.gnome.org/archives/gamin-list/">Mail archive</a></li><li><a href="http://oss.sgi.com/projects/fam/">FAM project</a></li><li><a href="sources/">sources</a></li><li><a href="http://bugzilla.gnome.org/buglist.cgi?product=gamin&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=NEEDINFO&amp;bug_status=REOPENED&amp;bug_status=RESOLVED&amp;bug_status=VERIFIED&amp;form_name=query">GNOME Bugzilla</a></li><li><a href="https://bugzilla.redhat.com/bugzilla/buglist.cgi?product=Fedora+Core&amp;product=Red+Hat+Enterprise+Linux&amp;component=fam&amp;component=gamin&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_status=MODIFIED&amp;short_desc_type=allwordssubstr&amp;short_desc=&amp;long_desc_type=allwordssubstr&amp;long_desc=&amp;Search=Search">Red Hat Bugzilla</a></li></ul></td></tr></table></td></tr></table></td><td valign="top" bgcolor="#8b7765"><table border="0" cellspacing="0" cellpadding="1" width="100%"><tr><td><table border="0" cellspacing="0" cellpadding="1" width="100%" bgcolor="#000000"><tr><td><table border="0" cellpadding="3" cellspacing="1" width="100%"><tr><td bgcolor="#fffacd"><ul><li><a href="#Debugging">Debugging support in gamin</a></li>
+  <li><a href="#Debugging1">Debugging a running program</a></li>
+  <li><a href="#Debugging2">Debugging and testing client</a></li>
+</ul><h3><a name="Debugging" id="Debugging">Debugging support in gamin</a>:</h3><p>Both the client and server side, if compiled with debug support accept an
+environment variable <strong>GAM_DEBUG</strong> which is set will make them
+report debugging informations to stdout.</p><p>Usually for debugging you also want to use a dedicated server process so
+setting the <strong>GAM_CLIENT_ID</strong> environment allows to ensure this.
+Usually one also want to keep control over the server lifetime and not have
+it exit automatically after 30 seconds without connection, there is a command
+line flag <strong>--notimeout</strong> to <strong>gam_server</strong> for
+this.</p><p>A typical example of a debugging session using 2 shells would be:</p><pre>shell1: export GAM_DEBUG=
+shell1: gam_server --notimeout test</pre><p>to run the server in debug mode using the ID "test"</p><pre>shell2: export GAM_DEBUG=
+shell2: export GAM_CLIENT_ID=test
+shell2: gamin_client</pre><p>to run the client in a verbose session. It is perfectly possible to also
+run the client under a debugger, for the server it works too except the
+dnotify kernel interface uses a signal SIG33 which is trapped by gdb. To
+avoid this use the handle gdb instruction:</p><pre>(gdb) handle SIG33 nostop
+Signal        Stop      Print   Pass to program Description
+SIG33         No        Yes     Yes             Real-time event 33
+(gdb)</pre><p>even better add it to your <strong>$HOME/.gdbinit</strong> .</p><h3><a name="Debugging1" id="Debugging1">Debugging a running program</a>:</h3><p>Both the gam_server and client of the gamin library can get switched
+dynamically to a debug mode by sending them a signal SIGUSR2. In that case
+the program or library switches to verbose debugging and outputs the traces
+to a new file /tmp/gamin_debug_XXXXXX . Sending the signal again to the
+application or the server should switch off debugging.</p><h3><a name="Debugging2" id="Debugging2">Debugging and testing client</a>:</h3><p>A debugging client program called <strong>testgam</strong> is also
+available in the tests subdirectory. It allow to use the interface and
+monitor the flow of event received. Here is an example of a session:</p><pre>paphio:~/gamin/tests -&gt; export GAMIN_DEBUG_SERVER="../server/gam_server"
+paphio:~/gamin/tests -&gt; ./testgam -
+&gt; connect test
+connected to test
+&gt;</pre><p>The environment variable can be used to specify the path to the server to
+run, then <strong>testgam</strong> is launched in interactive mode (argument
+<strong>-</strong> ) and the program is asked to connect to the server for
+session test (the server will be started on-demand by the library if
+needed).</p><pre>&gt; mkdir temp
+mkdir temp
+&gt; mkfile temp/foo
+mkfile temp/foo
+&gt; mondir temp
+mondir temp 0
+&gt;
+1: /u/veillard/gamin/tests/temp Exists: NULL
+1: foo Exists: NULL
+1: /u/veillard/gamin/tests/temp EndExist: NULL
+&gt; mkfile temp/bar
+mkfile temp/bar
+&gt;
+1: bar Created: NULL
+&gt; rmfile temp/foo
+rmfile temp/foo
+&gt;
+1: foo Deleted: NULL
+&gt;</pre><p>In this example a new directory is created with a file in it and then
+monitored, then the directory content is modified. The
+<strong>testgam</strong> program also poll and report events coming from the
+server as they arrive.</p><p><a href="contacts.html">Daniel Veillard</a></p></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></body></html>

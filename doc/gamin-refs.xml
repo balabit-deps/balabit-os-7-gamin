@@ -1,0 +1,1003 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<apirefs name='gamin'>
+  <references>
+    <reference name='FAMAcknowledge' href='html/gamin-fam.html#FAMAcknowledge'/>
+    <reference name='FAMCONNECTION_GETFD' href='html/gamin-fam.html#FAMCONNECTION_GETFD'/>
+    <reference name='FAMCancelMonitor' href='html/gamin-fam.html#FAMCancelMonitor'/>
+    <reference name='FAMChanged' href='html/gamin-fam.html#FAMChanged'/>
+    <reference name='FAMClose' href='html/gamin-fam.html#FAMClose'/>
+    <reference name='FAMCodes' href='html/gamin-fam.html#FAMCodes'/>
+    <reference name='FAMConnection' href='html/gamin-fam.html#FAMConnection'/>
+    <reference name='FAMConnectionPtr' href='html/gamin-fam.html#FAMConnectionPtr'/>
+    <reference name='FAMCreated' href='html/gamin-fam.html#FAMCreated'/>
+    <reference name='FAMDeleted' href='html/gamin-fam.html#FAMDeleted'/>
+    <reference name='FAMEndExist' href='html/gamin-fam.html#FAMEndExist'/>
+    <reference name='FAMErrno' href='html/gamin-fam.html#FAMErrno'/>
+    <reference name='FAMEvent' href='html/gamin-fam.html#FAMEvent'/>
+    <reference name='FAMExists' href='html/gamin-fam.html#FAMExists'/>
+    <reference name='FAMMonitorCollection' href='html/gamin-fam.html#FAMMonitorCollection'/>
+    <reference name='FAMMonitorDirectory' href='html/gamin-fam.html#FAMMonitorDirectory'/>
+    <reference name='FAMMonitorDirectory2' href='html/gamin-fam.html#FAMMonitorDirectory2'/>
+    <reference name='FAMMonitorFile' href='html/gamin-fam.html#FAMMonitorFile'/>
+    <reference name='FAMMonitorFile2' href='html/gamin-fam.html#FAMMonitorFile2'/>
+    <reference name='FAMMoved' href='html/gamin-fam.html#FAMMoved'/>
+    <reference name='FAMNextEvent' href='html/gamin-fam.html#FAMNextEvent'/>
+    <reference name='FAMOpen' href='html/gamin-fam.html#FAMOpen'/>
+    <reference name='FAMOpen2' href='html/gamin-fam.html#FAMOpen2'/>
+    <reference name='FAMPending' href='html/gamin-fam.html#FAMPending'/>
+    <reference name='FAMREQUEST_GETREQNUM' href='html/gamin-fam.html#FAMREQUEST_GETREQNUM'/>
+    <reference name='FAMRequest' href='html/gamin-fam.html#FAMRequest'/>
+    <reference name='FAMRequestPtr' href='html/gamin-fam.html#FAMRequestPtr'/>
+    <reference name='FAMResumeMonitor' href='html/gamin-fam.html#FAMResumeMonitor'/>
+    <reference name='FAMStartExecuting' href='html/gamin-fam.html#FAMStartExecuting'/>
+    <reference name='FAMStopExecuting' href='html/gamin-fam.html#FAMStopExecuting'/>
+    <reference name='FAMSuspendMonitor' href='html/gamin-fam.html#FAMSuspendMonitor'/>
+    <reference name='FamErrlist' href='html/gamin-fam.html#FamErrlist'/>
+    <reference name='GAMData' href='html/gamin-gam_data.html#GAMData'/>
+    <reference name='GAMDataPtr' href='html/gamin-gam_data.html#GAMDataPtr'/>
+    <reference name='GAMPacket' href='html/gamin-gam_protocol.html#GAMPacket'/>
+    <reference name='GAMPacketPtr' href='html/gamin-gam_protocol.html#GAMPacketPtr'/>
+    <reference name='GAMReqData' href='html/gamin-gam_data.html#GAMReqData'/>
+    <reference name='GAMReqDataPtr' href='html/gamin-gam_data.html#GAMReqDataPtr'/>
+    <reference name='GAMReqType' href='html/gamin-gam_protocol.html#GAMReqType'/>
+    <reference name='GAM_PACKET_HEADER_LEN' href='html/gamin-gam_protocol.html#GAM_PACKET_HEADER_LEN'/>
+    <reference name='GAM_PROTO_VERSION' href='html/gamin-gam_protocol.html#GAM_PROTO_VERSION'/>
+    <reference name='GAM_REQ_CANCEL' href='html/gamin-gam_protocol.html#GAM_REQ_CANCEL'/>
+    <reference name='GAM_REQ_DIR' href='html/gamin-gam_protocol.html#GAM_REQ_DIR'/>
+    <reference name='GAM_REQ_FILE' href='html/gamin-gam_protocol.html#GAM_REQ_FILE'/>
+    <reference name='MAXPATHLEN' href='html/gamin-gam_protocol.html#MAXPATHLEN'/>
+    <reference name='gamin_data_conn_data' href='html/gamin-gam_data.html#gamin_data_conn_data'/>
+    <reference name='gamin_data_del_req' href='html/gamin-gam_data.html#gamin_data_del_req'/>
+    <reference name='gamin_data_done_auth' href='html/gamin-gam_data.html#gamin_data_done_auth'/>
+    <reference name='gamin_data_event_ready' href='html/gamin-gam_data.html#gamin_data_event_ready'/>
+    <reference name='gamin_data_free' href='html/gamin-gam_data.html#gamin_data_free'/>
+    <reference name='gamin_data_get_data' href='html/gamin-gam_data.html#gamin_data_get_data'/>
+    <reference name='gamin_data_get_reqnum' href='html/gamin-gam_data.html#gamin_data_get_reqnum'/>
+    <reference name='gamin_data_get_request' href='html/gamin-gam_data.html#gamin_data_get_request'/>
+    <reference name='gamin_data_need_auth' href='html/gamin-gam_data.html#gamin_data_need_auth'/>
+    <reference name='gamin_data_new' href='html/gamin-gam_data.html#gamin_data_new'/>
+    <reference name='gamin_data_read_event' href='html/gamin-gam_data.html#gamin_data_read_event'/>
+    <reference name='gamin_data_reset' href='html/gamin-gam_data.html#gamin_data_reset'/>
+    <reference name='gamin_fork_server' href='html/gamin-gam_fork.html#gamin_fork_server'/>
+  </references>
+  <alpha>
+    <letter name='F'>
+      <ref name='FAMAcknowledge'/>
+      <ref name='FAMCONNECTION_GETFD'/>
+      <ref name='FAMCancelMonitor'/>
+      <ref name='FAMChanged'/>
+      <ref name='FAMClose'/>
+      <ref name='FAMCodes'/>
+      <ref name='FAMConnection'/>
+      <ref name='FAMConnectionPtr'/>
+      <ref name='FAMCreated'/>
+      <ref name='FAMDeleted'/>
+      <ref name='FAMEndExist'/>
+      <ref name='FAMErrno'/>
+      <ref name='FAMEvent'/>
+      <ref name='FAMExists'/>
+      <ref name='FAMMonitorCollection'/>
+      <ref name='FAMMonitorDirectory'/>
+      <ref name='FAMMonitorDirectory2'/>
+      <ref name='FAMMonitorFile'/>
+      <ref name='FAMMonitorFile2'/>
+      <ref name='FAMMoved'/>
+      <ref name='FAMNextEvent'/>
+      <ref name='FAMOpen'/>
+      <ref name='FAMOpen2'/>
+      <ref name='FAMPending'/>
+      <ref name='FAMREQUEST_GETREQNUM'/>
+      <ref name='FAMRequest'/>
+      <ref name='FAMRequestPtr'/>
+      <ref name='FAMResumeMonitor'/>
+      <ref name='FAMStartExecuting'/>
+      <ref name='FAMStopExecuting'/>
+      <ref name='FAMSuspendMonitor'/>
+      <ref name='FamErrlist'/>
+    </letter>
+    <letter name='G'>
+      <ref name='GAMData'/>
+      <ref name='GAMDataPtr'/>
+      <ref name='GAMPacket'/>
+      <ref name='GAMPacketPtr'/>
+      <ref name='GAMReqData'/>
+      <ref name='GAMReqDataPtr'/>
+      <ref name='GAMReqType'/>
+      <ref name='GAM_PACKET_HEADER_LEN'/>
+      <ref name='GAM_PROTO_VERSION'/>
+      <ref name='GAM_REQ_CANCEL'/>
+      <ref name='GAM_REQ_DIR'/>
+      <ref name='GAM_REQ_FILE'/>
+    </letter>
+    <letter name='M'>
+      <ref name='MAXPATHLEN'/>
+    </letter>
+    <letter name='g'>
+      <ref name='gamin_data_conn_data'/>
+      <ref name='gamin_data_del_req'/>
+      <ref name='gamin_data_done_auth'/>
+      <ref name='gamin_data_event_ready'/>
+      <ref name='gamin_data_free'/>
+      <ref name='gamin_data_get_data'/>
+      <ref name='gamin_data_get_reqnum'/>
+      <ref name='gamin_data_get_request'/>
+      <ref name='gamin_data_need_auth'/>
+      <ref name='gamin_data_new'/>
+      <ref name='gamin_data_read_event'/>
+      <ref name='gamin_data_reset'/>
+      <ref name='gamin_fork_server'/>
+    </letter>
+  </alpha>
+  <constructors>
+    <type name='GAMDataPtr'>
+      <ref name='gamin_data_new'/>
+    </type>
+  </constructors>
+  <functions>
+    <type name='FAMConnection *'>
+      <ref name='FAMCancelMonitor'/>
+      <ref name='FAMClose'/>
+      <ref name='FAMMonitorCollection'/>
+      <ref name='FAMMonitorDirectory'/>
+      <ref name='FAMMonitorDirectory2'/>
+      <ref name='FAMMonitorFile'/>
+      <ref name='FAMMonitorFile2'/>
+      <ref name='FAMNextEvent'/>
+      <ref name='FAMOpen'/>
+      <ref name='FAMOpen2'/>
+      <ref name='FAMPending'/>
+      <ref name='FAMResumeMonitor'/>
+      <ref name='FAMSuspendMonitor'/>
+    </type>
+    <type name='FAMEvent *'>
+      <ref name='FAMNextEvent'/>
+      <ref name='gamin_data_read_event'/>
+    </type>
+    <type name='FAMRequest *'>
+      <ref name='FAMCancelMonitor'/>
+      <ref name='FAMMonitorCollection'/>
+      <ref name='FAMMonitorDirectory'/>
+      <ref name='FAMMonitorDirectory2'/>
+      <ref name='FAMMonitorFile'/>
+      <ref name='FAMMonitorFile2'/>
+    </type>
+    <type name='GAMDataPtr'>
+      <ref name='gamin_data_conn_data'/>
+      <ref name='gamin_data_del_req'/>
+      <ref name='gamin_data_done_auth'/>
+      <ref name='gamin_data_event_ready'/>
+      <ref name='gamin_data_free'/>
+      <ref name='gamin_data_get_data'/>
+      <ref name='gamin_data_get_reqnum'/>
+      <ref name='gamin_data_get_request'/>
+      <ref name='gamin_data_need_auth'/>
+      <ref name='gamin_data_read_event'/>
+      <ref name='gamin_data_reset'/>
+    </type>
+    <type name='GAMReqDataPtr **'>
+      <ref name='gamin_data_reset'/>
+    </type>
+    <type name='char **'>
+      <ref name='gamin_data_get_data'/>
+    </type>
+    <type name='const FAMRequest *'>
+      <ref name='FAMResumeMonitor'/>
+      <ref name='FAMSuspendMonitor'/>
+    </type>
+    <type name='int *'>
+      <ref name='gamin_data_get_data'/>
+    </type>
+    <type name='void *'>
+      <ref name='FAMMonitorCollection'/>
+      <ref name='FAMMonitorDirectory'/>
+      <ref name='FAMMonitorFile'/>
+      <ref name='gamin_data_get_reqnum'/>
+      <ref name='gamin_data_get_request'/>
+    </type>
+  </functions>
+  <files>
+    <file name='fam'>
+      <ref name='FAMAcknowledge'/>
+      <ref name='FAMCONNECTION_GETFD'/>
+      <ref name='FAMCancelMonitor'/>
+      <ref name='FAMChanged'/>
+      <ref name='FAMClose'/>
+      <ref name='FAMCodes'/>
+      <ref name='FAMConnection'/>
+      <ref name='FAMConnectionPtr'/>
+      <ref name='FAMCreated'/>
+      <ref name='FAMDeleted'/>
+      <ref name='FAMEndExist'/>
+      <ref name='FAMErrno'/>
+      <ref name='FAMEvent'/>
+      <ref name='FAMExists'/>
+      <ref name='FAMMonitorCollection'/>
+      <ref name='FAMMonitorDirectory'/>
+      <ref name='FAMMonitorDirectory2'/>
+      <ref name='FAMMonitorFile'/>
+      <ref name='FAMMonitorFile2'/>
+      <ref name='FAMMoved'/>
+      <ref name='FAMNextEvent'/>
+      <ref name='FAMOpen'/>
+      <ref name='FAMOpen2'/>
+      <ref name='FAMPending'/>
+      <ref name='FAMREQUEST_GETREQNUM'/>
+      <ref name='FAMRequest'/>
+      <ref name='FAMRequestPtr'/>
+      <ref name='FAMResumeMonitor'/>
+      <ref name='FAMStartExecuting'/>
+      <ref name='FAMStopExecuting'/>
+      <ref name='FAMSuspendMonitor'/>
+      <ref name='FamErrlist'/>
+    </file>
+    <file name='gam_data'>
+      <ref name='GAMData'/>
+      <ref name='GAMDataPtr'/>
+      <ref name='GAMReqData'/>
+      <ref name='GAMReqDataPtr'/>
+      <ref name='gamin_data_conn_data'/>
+      <ref name='gamin_data_del_req'/>
+      <ref name='gamin_data_done_auth'/>
+      <ref name='gamin_data_event_ready'/>
+      <ref name='gamin_data_free'/>
+      <ref name='gamin_data_get_data'/>
+      <ref name='gamin_data_get_reqnum'/>
+      <ref name='gamin_data_get_request'/>
+      <ref name='gamin_data_need_auth'/>
+      <ref name='gamin_data_new'/>
+      <ref name='gamin_data_read_event'/>
+      <ref name='gamin_data_reset'/>
+    </file>
+    <file name='gam_fork'>
+      <ref name='gamin_fork_server'/>
+    </file>
+    <file name='gam_protocol'>
+      <ref name='GAMPacket'/>
+      <ref name='GAMPacketPtr'/>
+      <ref name='GAMReqType'/>
+      <ref name='GAM_PACKET_HEADER_LEN'/>
+      <ref name='GAM_PROTO_VERSION'/>
+      <ref name='GAM_REQ_CANCEL'/>
+      <ref name='GAM_REQ_DIR'/>
+      <ref name='GAM_REQ_FILE'/>
+      <ref name='MAXPATHLEN'/>
+    </file>
+  </files>
+  <index>
+    <chunk name='chunk0'>
+      <letter name='A'>
+        <word name='API'>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+        </word>
+        <word name='Allocates'>
+          <ref name='gamin_data_new'/>
+        </word>
+      </letter>
+      <letter name='C'>
+        <word name='Check'>
+          <ref name='FAMPending'/>
+        </word>
+      </letter>
+      <letter name='F'>
+        <word name='FAM'>
+          <ref name='FAMClose'/>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+        </word>
+        <word name='Fills'>
+          <ref name='gamin_data_read_event'/>
+        </word>
+        <word name='Forks'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='Free'>
+          <ref name='gamin_data_free'/>
+        </word>
+      </letter>
+      <letter name='G'>
+        <word name='GAMReqOpts'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='GAMReqType'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='GAM_CLIENT_ID'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='Get'>
+          <ref name='gamin_data_get_data'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+        </word>
+      </letter>
+      <letter name='N'>
+        <word name='NOT'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+        <word name='NULL'>
+          <ref name='gamin_data_new'/>
+        </word>
+        <word name='Needed'>
+          <ref name='MAXPATHLEN'/>
+        </word>
+      </letter>
+      <letter name='R'>
+        <word name='Read'>
+          <ref name='FAMNextEvent'/>
+        </word>
+        <word name='Received'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='Register'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+        </word>
+        <word name='Remove'>
+          <ref name='gamin_data_del_req'/>
+        </word>
+        <word name='Reset'>
+          <ref name='gamin_data_reset'/>
+        </word>
+      </letter>
+      <letter name='S'>
+        <word name='SUPPORTED'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+      </letter>
+      <letter name='T'>
+        <word name='This'>
+          <ref name='FAMCancelMonitor'/>
+          <ref name='FAMClose'/>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+          <ref name='gamin_data_get_data'/>
+        </word>
+      </letter>
+      <letter name='U'>
+        <word name='Unsupported'>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+        </word>
+      </letter>
+      <letter name='a'>
+        <word name='accessed'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+        </word>
+        <word name='address'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='after'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='amount'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='any'>
+          <ref name='GAMReqData'/>
+        </word>
+        <word name='application'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='array'>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='associated'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+        </word>
+        <word name='authentication'>
+          <ref name='gamin_data_done_auth'/>
+          <ref name='gamin_data_get_data'/>
+          <ref name='gamin_data_need_auth'/>
+        </word>
+        <word name='available'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMOpen2'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+          <ref name='gamin_data_get_data'/>
+          <ref name='gamin_data_read_event'/>
+        </word>
+      </letter>
+      <letter name='b'>
+        <word name='blocking'>
+          <ref name='FAMNextEvent'/>
+        </word>
+      </letter>
+      <letter name='c'>
+        <word name='call'>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+        </word>
+        <word name='called'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='check'>
+          <ref name='MAXPATHLEN'/>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='client'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='closes'>
+          <ref name='FAMClose'/>
+        </word>
+        <word name='complete'>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_data_read_event'/>
+        </word>
+        <word name='convenience'>
+          <ref name='GAM_PACKET_HEADER_LEN'/>
+        </word>
+        <word name='current'>
+          <ref name='gamin_data_done_auth'/>
+          <ref name='gamin_data_need_auth'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+      </letter>
+      <letter name='d'>
+        <word name='data'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_data_del_req'/>
+          <ref name='gamin_data_done_auth'/>
+          <ref name='gamin_data_event_ready'/>
+          <ref name='gamin_data_free'/>
+          <ref name='gamin_data_get_data'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+          <ref name='gamin_data_need_auth'/>
+          <ref name='gamin_data_new'/>
+          <ref name='gamin_data_read_event'/>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='depth'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+        <word name='descriptor'>
+          <ref name='FAMCONNECTION_GETFD'/>
+        </word>
+        <word name='detected'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='did'>
+          <ref name='gamin_data_done_auth'/>
+        </word>
+        <word name='directory'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+        </word>
+      </letter>
+      <letter name='e'>
+        <word name='environment'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='error'>
+          <ref name='FAMCancelMonitor'/>
+          <ref name='FAMClose'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='FAMNextEvent'/>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+          <ref name='FAMPending'/>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_data_del_req'/>
+          <ref name='gamin_data_event_ready'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+          <ref name='gamin_data_need_auth'/>
+          <ref name='gamin_data_new'/>
+          <ref name='gamin_data_read_event'/>
+          <ref name='gamin_data_reset'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='event'>
+          <ref name='FAMNextEvent'/>
+          <ref name='FAMPending'/>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_data_event_ready'/>
+          <ref name='gamin_data_read_event'/>
+        </word>
+        <word name='events'>
+          <ref name='FAMPending'/>
+          <ref name='GAMReqData'/>
+        </word>
+        <word name='extended'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+      </letter>
+      <letter name='f'>
+        <word name='failure'>
+          <ref name='gamin_data_done_auth'/>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='false'>
+          <ref name='gamin_data_event_ready'/>
+        </word>
+        <word name='fam'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='field'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+        </word>
+        <word name='file'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='filename'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='GAMPacket'/>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+        </word>
+        <word name='for'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='FAMPending'/>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_data_event_ready'/>
+          <ref name='gamin_data_get_data'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+          <ref name='gamin_data_reset'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='from'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+          <ref name='gamin_data_del_req'/>
+        </word>
+        <word name='full'>
+          <ref name='gamin_data_event_ready'/>
+        </word>
+        <word name='function'>
+          <ref name='FAMCancelMonitor'/>
+          <ref name='FAMClose'/>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+        </word>
+      </letter>
+      <letter name='g'>
+        <word name='given'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+      </letter>
+      <letter name='h'>
+        <word name='header'>
+          <ref name='GAM_PACKET_HEADER_LEN'/>
+        </word>
+      </letter>
+      <letter name='i'>
+        <word name='incoming'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='incomplete'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='input'>
+          <ref name='FAMNextEvent'/>
+        </word>
+        <word name='interface'>
+          <ref name='FAMOpen2'/>
+        </word>
+      </letter>
+      <letter name='k'>
+        <word name='keep'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+      </letter>
+      <letter name='l'>
+        <word name='launch'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='len'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='lenght'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='length'>
+          <ref name='GAMPacket'/>
+          <ref name='GAM_PACKET_HEADER_LEN'/>
+          <ref name='MAXPATHLEN'/>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='level'>
+          <ref name='GAM_PROTO_VERSION'/>
+        </word>
+        <word name='libgamin'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='limit'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+      </letter>
+      <letter name='m'>
+        <word name='macro'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+          <ref name='GAM_PACKET_HEADER_LEN'/>
+        </word>
+        <word name='make'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='monitoring'>
+          <ref name='FAMCancelMonitor'/>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+        </word>
+        <word name='more'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='must'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+        </word>
+      </letter>
+    </chunk>
+    <chunk name='chunk1'>
+      <letter name='n'>
+        <word name='name'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='needed'>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_need_auth'/>
+        </word>
+        <word name='needing'>
+          <ref name='gamin_data_need_auth'/>
+        </word>
+        <word name='new'>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+          <ref name='gamin_data_new'/>
+        </word>
+        <word name='next'>
+          <ref name='FAMNextEvent'/>
+        </word>
+        <word name='not'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='gamin_data_need_auth'/>
+        </word>
+        <word name='number'>
+          <ref name='FAMPending'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+          <ref name='GAMPacket'/>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_del_req'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+          <ref name='gamin_data_reset'/>
+        </word>
+      </letter>
+      <letter name='o'>
+        <word name='only'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+        </word>
+        <word name='open'>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='otherwise'>
+          <ref name='FAMClose'/>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+      </letter>
+      <letter name='p'>
+        <word name='packet'>
+          <ref name='GAM_PACKET_HEADER_LEN'/>
+        </word>
+        <word name='path'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='paths'>
+          <ref name='MAXPATHLEN'/>
+        </word>
+        <word name='payload'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='pending'>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='permanently'>
+          <ref name='FAMCancelMonitor'/>
+        </word>
+        <word name='pointer'>
+          <ref name='FAMCancelMonitor'/>
+          <ref name='FAMClose'/>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='FAMNextEvent'/>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+          <ref name='FAMPending'/>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+          <ref name='gamin_data_read_event'/>
+        </word>
+        <word name='possibly'>
+          <ref name='FAMNextEvent'/>
+        </word>
+        <word name='process'>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='processing'>
+          <ref name='FAMPending'/>
+          <ref name='gamin_data_event_ready'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='protocol'>
+          <ref name='GAMPacket'/>
+          <ref name='GAM_PROTO_VERSION'/>
+        </word>
+        <word name='provide'>
+          <ref name='GAM_PACKET_HEADER_LEN'/>
+        </word>
+        <word name='provided'>
+          <ref name='gamin_data_get_request'/>
+        </word>
+      </letter>
+      <letter name='r'>
+        <word name='ready'>
+          <ref name='gamin_data_event_ready'/>
+        </word>
+        <word name='reconnection'>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='recursion'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+        <word name='relative'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+        </word>
+        <word name='requests'>
+          <ref name='gamin_data_reset'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='reset'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='restarts'>
+          <ref name='GAMReqData'/>
+        </word>
+        <word name='return'>
+          <ref name='gamin_data_reset'/>
+        </word>
+      </letter>
+      <letter name='s'>
+        <word name='sanity'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='sequence'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='server'>
+          <ref name='FAMClose'/>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='should'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+        </word>
+        <word name='socket'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='some'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='state'>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='stop'>
+          <ref name='FAMCancelMonitor'/>
+        </word>
+        <word name='storage'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='store'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='string'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='success'>
+          <ref name='FAMCancelMonitor'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorDirectory2'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='FAMMonitorFile2'/>
+          <ref name='FAMNextEvent'/>
+          <ref name='FAMResumeMonitor'/>
+          <ref name='FAMSuspendMonitor'/>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_data_del_req'/>
+          <ref name='gamin_data_done_auth'/>
+          <ref name='gamin_data_get_data'/>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='sucessed'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='sucessfully'>
+          <ref name='gamin_data_done_auth'/>
+        </word>
+        <word name='supposedly'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+      </letter>
+      <letter name='t'>
+        <word name='that'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='them'>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='there'>
+          <ref name='gamin_data_conn_data'/>
+          <ref name='gamin_data_event_ready'/>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='this'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorFile'/>
+        </word>
+        <word name='though'>
+          <ref name='FAMCONNECTION_GETFD'/>
+          <ref name='FAMOpen2'/>
+          <ref name='FAMREQUEST_GETREQNUM'/>
+        </word>
+        <word name='too'>
+          <ref name='gamin_data_get_data'/>
+        </word>
+        <word name='total'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='tries'>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='true'>
+          <ref name='gamin_data_event_ready'/>
+          <ref name='gamin_data_need_auth'/>
+        </word>
+        <word name='try'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='type'>
+          <ref name='GAMPacket'/>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+        </word>
+      </letter>
+      <letter name='u'>
+        <word name='under'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='uninitialized'>
+          <ref name='FAMOpen'/>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='unknown'>
+          <ref name='FAMMonitorCollection'/>
+        </word>
+        <word name='use'>
+          <ref name='gamin_fork_server'/>
+        </word>
+        <word name='used'>
+          <ref name='FAMCancelMonitor'/>
+        </word>
+        <word name='user'>
+          <ref name='FAMMonitorCollection'/>
+          <ref name='FAMMonitorDirectory'/>
+          <ref name='FAMMonitorFile'/>
+          <ref name='GAMReqData'/>
+          <ref name='gamin_data_get_reqnum'/>
+          <ref name='gamin_data_get_request'/>
+        </word>
+        <word name='using'>
+          <ref name='gamin_fork_server'/>
+        </word>
+      </letter>
+      <letter name='v'>
+        <word name='value'>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='variable'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='version'>
+          <ref name='GAMPacket'/>
+        </word>
+        <word name='versionning'>
+          <ref name='GAM_PROTO_VERSION'/>
+        </word>
+      </letter>
+      <letter name='w'>
+        <word name='waiting'>
+          <ref name='FAMPending'/>
+          <ref name='gamin_data_conn_data'/>
+        </word>
+        <word name='when'>
+          <ref name='gamin_data_reset'/>
+        </word>
+        <word name='where'>
+          <ref name='gamin_data_get_request'/>
+        </word>
+        <word name='whose'>
+          <ref name='FAMOpen2'/>
+        </word>
+        <word name='with'>
+          <ref name='gamin_data_read_event'/>
+        </word>
+      </letter>
+    </chunk>
+    <chunks>
+      <chunk name='chunk0' start='A' end='m'/>
+      <chunk name='chunk1' start='n' end='w'/>
+    </chunks>
+  </index>
+</apirefs>
